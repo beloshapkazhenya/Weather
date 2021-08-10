@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Weather</string>
+    <string name="weather_hour_icon_contentDescription">weather icon</string>
+    <string name="weather_icon_day">weather icon</string>
 </resources>
