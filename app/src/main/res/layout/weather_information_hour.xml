@@ -2,24 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:layout_marginStart="100dp"
+    android:layout_marginStart="20dp"
     android:gravity="center_horizontal"
     android:orientation="vertical">
+
     <TextView
+        android:id="@+id/hour_information_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:id="@+id/hour_information_time"/>
+        android:textColor="@color/black" />
+
     <ImageView
+        android:id="@+id/hour_information_icon"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:id="@+id/hour_information_icon"
-        android:src="@drawable/test_icon"
-        android:contentDescription="@string/weather_hour_icon_contentDescription" />
+        android:contentDescription="@string/weather_hour_icon_contentDescription"
+        android:src="@drawable/test_icon" />
+
     <TextView
+        android:id="@+id/hour_information_temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:id="@+id/hour_information_temperature"/>
+        android:textColor="@color/black" />
 </LinearLayout>

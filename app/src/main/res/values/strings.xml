@@ -2,4 +2,8 @@
     <string name="app_name">Weather</string>
     <string name="weather_hour_icon_contentDescription">weather icon</string>
     <string name="weather_icon_day">weather icon</string>
+    <string name="wind_icon">wind icon</string>
+    <string name="pressure_icon">pressure icon</string>
+    <string name="sunrise">sunrise</string>
+    <string name="sunset">sunset</string>
 </resources>

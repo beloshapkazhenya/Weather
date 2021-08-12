@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -20,109 +19,183 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:gravity="center">
+        android:paddingTop="10dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="32dp"
             android:text="+23°"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="32sp" />
+
         <ImageView
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@drawable/test_icon"/>
+            android:src="@drawable/test_icon" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:contentDescription="@string/sunrise"
+                    android:src="@drawable/ic_sunrise" />
+
+                <TextView
+                    android:id="@+id/sunrise_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="6:50" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:contentDescription="@string/sunset"
+                    android:src="@drawable/ic_sunset" />
+
+                <TextView
+                    android:id="@+id/sunset_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="21:50" />
+            </LinearLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingBottom="10dp"
         android:text="Солнечно"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Ощущается как: +23"
         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
 
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:layout_marginTop="15dp"
         android:scrollbars="none">
+
         <LinearLayout
+            android:id="@+id/hour_information_layout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/hour_information_layout"
             android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/test_wind"/>
+                        android:contentDescription="@string/wind_icon"
+                        android:src="@drawable/test_wind" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:textColor="@color/black"
-                        android:text="3"/>
+                        android:layout_marginStart="5dp"
+                        android:text="3"
+                        android:textColor="@color/black" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:textColor="@color/black"
-                        android:text="м/с" />
+                        android:layout_marginStart="5dp"
+                        android:text="м/с"
+                        android:textColor="@color/black" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/test_pressure"/>
+                        android:contentDescription="@string/pressure_icon"
+                        android:src="@drawable/test_pressure" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:textColor="@color/black"
-                        android:text="751"/>
+                        android:layout_marginStart="5dp"
+                        android:text="751"
+                        android:textColor="@color/black" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:textColor="@color/black"
-                        android:text="мм рт.ст."/>
+                        android:layout_marginStart="5dp"
+                        android:text="мм рт.ст."
+                        android:textColor="@color/black" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="bottom"
                     android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/test_humidity"/>
+                        android:src="@drawable/test_humidity" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:textColor="@color/black"
-                        android:text="70"/>
+                        android:layout_marginStart="5dp"
+                        android:text="70"
+                        android:textColor="@color/black" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:textColor="@color/black"
-                        android:text="%"/>
+                        android:layout_marginStart="5dp"
+                        android:text="%"
+                        android:textColor="@color/black" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -130,10 +203,13 @@
     </HorizontalScrollView>
 
     <LinearLayout
+        android:id="@+id/day_information_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/day_information_layout"
-        android:orientation="vertical">
+        android:layout_marginTop="10dp"
+        android:divider="@drawable/separator"
+        android:orientation="vertical"
+        android:showDividers="beginning|middle|end">
 
     </LinearLayout>
 
