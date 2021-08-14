@@ -6,4 +6,9 @@
     <string name="pressure_icon">pressure icon</string>
     <string name="sunrise">sunrise</string>
     <string name="sunset">sunset</string>
+    <string name="title_location_permission">Местоположение</string>
+    <string name="text_location_permission">Можно ли определять местоположение?</string>
+    <string name="ok">ОК</string>
+    <string name="current_weather_icon">current weather icon</string>
+    <string name="humidity_icon">humidity icon</string>
 </resources>

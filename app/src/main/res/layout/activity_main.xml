@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,13 +9,14 @@
 
 
     <TextView
+        android:id="@+id/current_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Бобруйск"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     <LinearLayout
+        android:id="@+id/current_weather"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -24,15 +24,16 @@
         android:paddingTop="10dp">
 
         <TextView
+            android:id="@+id/current_temperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+23°"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="32sp" />
 
         <ImageView
             android:layout_width="70dp"
             android:layout_height="70dp"
+            android:contentDescription="@string/current_weather_icon"
             android:src="@drawable/test_icon" />
 
         <LinearLayout
@@ -56,8 +57,7 @@
                     android:id="@+id/sunrise_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="6:50" />
+                    android:layout_marginStart="5dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -76,26 +76,25 @@
                     android:id="@+id/sunset_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="21:50" />
+                    android:layout_marginStart="5dp" />
             </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
 
     <TextView
+        android:id="@+id/current_weather_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Солнечно"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@color/black" />
 
     <TextView
+        android:id="@+id/current_weather_feels_like"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Ощущается как: +23"
         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
 
@@ -129,18 +128,12 @@
                         android:src="@drawable/test_wind" />
 
                     <TextView
+                        android:id="@+id/wind_speed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="3"
                         android:textColor="@color/black" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="м/с"
-                        android:textColor="@color/black" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -157,17 +150,10 @@
                         android:src="@drawable/test_pressure" />
 
                     <TextView
+                        android:id="@+id/pressure"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="751"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="мм рт.ст."
                         android:textColor="@color/black" />
                 </LinearLayout>
 
@@ -181,21 +167,16 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
+                        android:contentDescription="@string/humidity_icon"
                         android:src="@drawable/test_humidity" />
 
                     <TextView
+                        android:id="@+id/humidity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="70"
                         android:textColor="@color/black" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="%"
-                        android:textColor="@color/black" />
                 </LinearLayout>
             </LinearLayout>
 
