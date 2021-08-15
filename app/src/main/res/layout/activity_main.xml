@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:orientation="vertical"
     android:padding="20dp"
     tools:context=".MainActivity">
-
 
     <TextView
         android:id="@+id/current_location"
@@ -19,84 +21,70 @@
         android:id="@+id/current_weather"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingTop="10dp">
-
-        <TextView
-            android:id="@+id/current_temperature"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="32sp" />
-
-        <ImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:contentDescription="@string/current_weather_icon"
-            android:src="@drawable/test_icon" />
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/current_temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="32sp" />
+
+            <ImageView
+                android:id="@+id/current_weather_icon"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:contentDescription="@string/current_weather_icon" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:contentDescription="@string/sunrise"
-                    android:src="@drawable/ic_sunrise" />
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/sunrise_time"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:contentDescription="@string/sunset"
-                    android:src="@drawable/ic_sunset" />
+                    android:layout_height="0dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    app:drawableLeftCompat="@drawable/icon_sunrise" />
 
                 <TextView
                     android:id="@+id/sunset_time"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp" />
+                    android:layout_height="0dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    app:drawableLeftCompat="@drawable/icon_sunset" />
             </LinearLayout>
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/current_weather_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/current_weather_feels_like"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/current_weather_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="@color/black" />
-
-    <TextView
-        android:id="@+id/current_weather_feels_like"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
 
     <HorizontalScrollView
         android:layout_width="match_parent"
@@ -111,75 +99,42 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/current_weather_parameters"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:contentDescription="@string/wind_icon"
-                        android:src="@drawable/test_wind" />
-
-                    <TextView
-                        android:id="@+id/wind_speed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:textColor="@color/black" />
-
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/wind_speed"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:textColor="@color/black"
+                    android:drawablePadding="5dp"
+                    app:drawableLeftCompat="@drawable/icon_wind" />
 
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:contentDescription="@string/pressure_icon"
-                        android:src="@drawable/test_pressure" />
-
-                    <TextView
-                        android:id="@+id/pressure"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/pressure"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:gravity="bottom"
-                    android:orientation="horizontal">
+                    android:drawablePadding="5dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    app:drawableLeftCompat="@drawable/icon_pressure" />
 
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:contentDescription="@string/humidity_icon"
-                        android:src="@drawable/test_humidity" />
-
-                    <TextView
-                        android:id="@+id/humidity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:textColor="@color/black" />
-
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/humidity"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    app:drawableLeftCompat="@drawable/icon_humidity" />
             </LinearLayout>
-
         </LinearLayout>
     </HorizontalScrollView>
 
@@ -193,6 +148,4 @@
         android:showDividers="beginning|middle|end">
 
     </LinearLayout>
-
-
 </LinearLayout>

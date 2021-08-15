@@ -17,8 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:contentDescription="@string/weather_hour_icon_contentDescription"
-        android:src="@drawable/test_icon" />
+        android:contentDescription="@string/weather_hour_icon_contentDescription"/>
 
     <TextView
         android:id="@+id/hour_information_temperature"

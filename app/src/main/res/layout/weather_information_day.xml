@@ -4,6 +4,8 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="horizontal"
+    android:paddingHorizontal="5dp"
+    android:background="@color/daily_background"
     android:paddingVertical="5dp">
 
     <TextView
@@ -17,8 +19,7 @@
         android:id="@+id/day_information_icon"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:contentDescription="@string/weather_icon_day"
-        android:src="@drawable/test_icon" />
+        android:contentDescription="@string/weather_icon_day"/>
 
     <TextView
         android:id="@+id/day_information_temperature_day"
