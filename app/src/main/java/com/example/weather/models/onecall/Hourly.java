@@ -5,8 +5,10 @@ import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 @SuppressWarnings("unused")
-public class Hourly {
+public class Hourly  {
 
     @SerializedName("clouds")
     private Long mClouds;

@@ -1,4 +1,7 @@
 package com.example.weather.ui.mainscreen;
 
-public class MainController {
+import android.app.Application;
+
+public class MainController extends Application {
+
 }

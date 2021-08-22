@@ -5,8 +5,10 @@ import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 @SuppressWarnings("unused")
-public class OneCallModel {
+public class OneCallModel  {
 
     @SerializedName("current")
     private Current mCurrent;

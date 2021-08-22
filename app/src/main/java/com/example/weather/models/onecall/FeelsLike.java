@@ -3,8 +3,10 @@ package com.example.weather.models.onecall;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 @SuppressWarnings("unused")
-public class FeelsLike {
+public class FeelsLike  {
 
     @SerializedName("day")
     private Double mDay;
