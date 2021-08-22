@@ -19,7 +19,9 @@ public class DailyAdapter extends
 
     private final List<DayWeather> mDayWeather;
 
-    public DailyAdapter(List<DayWeather> dayWeathers) {mDayWeather = dayWeathers;}
+    public DailyAdapter(List<DayWeather> dayWeathers) {
+        mDayWeather = dayWeathers;
+    }
 
     @NonNull
     @Override

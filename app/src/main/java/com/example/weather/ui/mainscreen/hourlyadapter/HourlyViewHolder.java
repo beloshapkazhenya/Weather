@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weather.R;
 
-class HourlyViewHolder extends RecyclerView.ViewHolder{
+class HourlyViewHolder extends RecyclerView.ViewHolder {
     public TextView hourTextView;
     public TextView dateTextView;
     public ImageView weatherIcon;
     public TextView hourTemperature;
 
-    public HourlyViewHolder(View itemView){
+    public HourlyViewHolder(View itemView) {
         super(itemView);
 
         hourTextView = itemView.findViewById(R.id.vTvHourTime);

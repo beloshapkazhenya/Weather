@@ -19,21 +19,21 @@ public class HourlyAdapter extends
 
     private final List<HourWeather> mHourWeather;
 
-    public HourlyAdapter(List<HourWeather> hourWeathers){
+    public HourlyAdapter(List<HourWeather> hourWeathers) {
         mHourWeather = hourWeathers;
     }
 
     @NonNull
     @Override
-    public HourlyViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public HourlyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View hourWeatherView = inflater.inflate(R.layout.weather_information_hour,parent,false);
+        View hourWeatherView = inflater.inflate(R.layout.weather_information_hour, parent, false);
         return new HourlyViewHolder(hourWeatherView);
     }
 
     @Override
-    public void onBindViewHolder(HourlyViewHolder holder, int position){
+    public void onBindViewHolder(HourlyViewHolder holder, int position) {
         HourWeather hourWeather = mHourWeather.get(position);
         holder.hourTextView.setText(hourWeather.getCurrHour());
         holder.dateTextView.setText(hourWeather.getCurrDate());
@@ -43,7 +43,7 @@ public class HourlyAdapter extends
     }
 
     @Override
-    public int getItemCount(){
+    public int getItemCount() {
         return mHourWeather.size();
     }
 }

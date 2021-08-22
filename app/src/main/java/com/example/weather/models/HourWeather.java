@@ -6,26 +6,26 @@ public class HourWeather {
     private final String hourIconId;
     private final String hourTemperature;
 
-    public HourWeather(String hour, String date, String iconId, String temperature){
+    public HourWeather(String hour, String date, String iconId, String temperature) {
         currHour = hour;
         currDate = date;
         hourIconId = iconId;
         hourTemperature = temperature;
     }
 
-    public String getCurrHour(){
+    public String getCurrHour() {
         return currHour;
     }
 
-    public String getCurrDate(){
+    public String getCurrDate() {
         return currDate;
     }
 
-    public String getHourIconId(){
+    public String getHourIconId() {
         return hourIconId;
     }
 
-    public String getHourTemperature(){
+    public String getHourTemperature() {
         return hourTemperature;
     }
 }

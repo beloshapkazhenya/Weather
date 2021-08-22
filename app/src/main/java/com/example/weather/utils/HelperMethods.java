@@ -13,11 +13,15 @@ import java.util.Locale;
 
 public class HelperMethods {
 
-    private static int pressureConverter(int pressure) {
-        return (int) Math.round((pressure / 1.333));
+    public static String pressureToString(int pressure) {
+        return Math.round((pressure / 1.333)) + " мм.рт.ст.";
     }
 
-    static String getTime(long decimal) {
+    public static String windSpeedToString(double windSpeed) {
+        return Math.round(windSpeed) + " м/с";
+    }
+
+    public static String getTime(long decimal) {
         Date date = new java.util.Date(decimal * 1000L);
         SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm", Locale.ENGLISH);
         sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT+3"));

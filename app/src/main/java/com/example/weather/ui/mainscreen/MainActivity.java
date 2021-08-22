@@ -1,26 +1,28 @@
 package com.example.weather.ui.mainscreen;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.example.weather.models.DayWeather;
-import com.example.weather.ui.mainscreen.dailyadapter.DailyAdapter;
-import com.example.weather.utils.HelperMethods;
-import com.example.weather.ui.mainscreen.hourlyadapter.HourlyAdapter;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.weather.R;
+import com.example.weather.models.DayWeather;
 import com.example.weather.models.HourWeather;
 import com.example.weather.models.onecall.Daily;
 import com.example.weather.models.onecall.Hourly;
 import com.example.weather.repository.WeatherRepository;
+import com.example.weather.ui.mainscreen.dailyadapter.DailyAdapter;
+import com.example.weather.ui.mainscreen.hourlyadapter.HourlyAdapter;
+import com.example.weather.utils.HelperMethods;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
 
-        new WeatherRepository().getWeather(latitude,longitude)
+        new WeatherRepository().getWeather(latitude, longitude)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(oneCallModel -> {
@@ -68,6 +70,22 @@ public class MainActivity extends AppCompatActivity {
                     updateDailyRecyclerView(oneCallModel.getDaily());
                 }, throwable -> {
 
+                });
+
+        new WeatherRepository().getCurrent(latitude, longitude)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(currentWeatherModel -> {
+                    updateCurrentLocation(currentWeatherModel.getName());
+                    updateCurrentWeatherIcon(currentWeatherModel.getWeather().get(0).getIcon());
+                    updateSunrise(currentWeatherModel.getSys().getSunrise());
+                    updateCurrentTemperature(currentWeatherModel.getMain().getTemp());
+                    updateSunset(currentWeatherModel.getSys().getSunset());
+                    updateCurrentWeatherDescription(currentWeatherModel.getWeather().get(0).getDescription());
+                    updateCurrentWeatherFeelsLike(currentWeatherModel.getMain().getFeelsLike());
+                    updateWindSpeed(currentWeatherModel.getWind().getSpeed());
+                    updatePressure(currentWeatherModel.getMain().getPressure());
+                    updateHumidity(currentWeatherModel.getMain().getHumidity());
                 });
     }
 
@@ -88,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         rvHourWeather.setAdapter(hourlyAdapter);
     }
 
-    public void updateDailyRecyclerView(List<Daily> list){
+    public void updateDailyRecyclerView(List<Daily> list) {
         RecyclerView rvDailyWeather = findViewById(R.id.vRvDailyInformation);
         ArrayList<DayWeather> dayWeathers = HelperMethods.createDayWeatherList(list);
         DailyAdapter dailyAdapter = new DailyAdapter(dayWeathers);
@@ -96,4 +114,56 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void updateWindSpeed(double windSpeed) {
+        TextView windTextView = findViewById(R.id.vTvWindSpeed);
+        windTextView.setText(HelperMethods.windSpeedToString(windSpeed));
+    }
+
+    public void updatePressure(int pressure) {
+        TextView pressureTextView = findViewById(R.id.vTvPressure);
+        pressureTextView.setText(HelperMethods.pressureToString(pressure));
+    }
+
+    public void updateHumidity(int humidity) {
+        TextView humidityTextView = findViewById(R.id.vTvHumidity);
+        String humidityString = humidity + "%";
+        humidityTextView.setText(humidityString);
+    }
+
+    public void updateCurrentLocation(String location) {
+        TextView locationTextView = findViewById(R.id.vTvCurrentLocationTitle);
+        locationTextView.setText(location);
+    }
+
+    public void updateSunrise(long sunrise) {
+        TextView sunriseTextView = findViewById(R.id.vTvSunriseTime);
+        sunriseTextView.setText(HelperMethods.getTime(sunrise));
+    }
+
+    public void updateSunset(long sunset) {
+        TextView sunriseTextView = findViewById(R.id.vTvSunsetTime);
+        sunriseTextView.setText(HelperMethods.getTime(sunset));
+    }
+
+    public void updateCurrentWeatherIcon(String iconId) {
+        ImageView currentWeatherIconImageView = findViewById(R.id.vIvCurrentWeatherIcon);
+        String path = "https://openweathermap.org/img/wn/" + iconId + "@2x.png";
+        Picasso.get().load(path).error(R.drawable.unknown).into(currentWeatherIconImageView);
+    }
+
+    public void updateCurrentWeatherDescription(String description) {
+        TextView descriptionTextView = findViewById(R.id.vTvCurrentWeatherDescription);
+        descriptionTextView.setText(description);
+    }
+
+    public void updateCurrentWeatherFeelsLike(double feelsLike) {
+        TextView feelsLikeTextView = findViewById(R.id.vTvCurrentWeatherFeelsLike);
+        String feelsLikeString = "Ощущается как: " + HelperMethods.temperatureToString(feelsLike);
+        feelsLikeTextView.setText(feelsLikeString);
+    }
+
+    public void updateCurrentTemperature(double temperature) {
+        TextView currentTemperature = findViewById(R.id.vTvCurrentTemperature);
+        currentTemperature.setText(HelperMethods.temperatureToString(temperature));
+    }
 }
