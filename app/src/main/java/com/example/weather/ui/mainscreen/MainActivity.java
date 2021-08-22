@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.weather.R;
 import com.example.weather.models.DayWeather;
 import com.example.weather.models.HourWeather;
+import com.example.weather.models.currentweather.CurrentWeatherModel;
 import com.example.weather.models.onecall.Daily;
 import com.example.weather.models.onecall.Hourly;
 import com.example.weather.repository.WeatherRepository;
@@ -29,6 +30,8 @@ import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -44,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Realm.init(getApplicationContext());
+        RealmConfiguration config = new RealmConfiguration.Builder().name("currentWeatherData").build();
+        Realm.setDefaultConfiguration(config);
+
+
         int REQUEST_LOCATION = 1;
 
         startLocationManager();
@@ -51,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
         locationListener = location -> {
             latitude = location.getLatitude();
             longitude = location.getLongitude();
-            //TODO Действие при получении координат, заменить на разовое определение
+            getCurrentWeather();
+            getWeather();
             stopLocationManager();
         };
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -61,34 +70,42 @@ public class MainActivity extends AppCompatActivity {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
+    }
 
+    public void getWeather() {
         new WeatherRepository().getWeather(latitude, longitude)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(oneCallModel -> {
                     updateHourlyRecyclerView(oneCallModel.getHourly());
                     updateDailyRecyclerView(oneCallModel.getDaily());
+
                 }, throwable -> {
 
                 });
+    }
 
+    public void getCurrentWeather() {
         new WeatherRepository().getCurrent(latitude, longitude)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(currentWeatherModel -> {
-                    updateCurrentLocation(currentWeatherModel.getName());
-                    updateCurrentWeatherIcon(currentWeatherModel.getWeather().get(0).getIcon());
-                    updateSunrise(currentWeatherModel.getSys().getSunrise());
-                    updateCurrentTemperature(currentWeatherModel.getMain().getTemp());
-                    updateSunset(currentWeatherModel.getSys().getSunset());
-                    updateCurrentWeatherDescription(currentWeatherModel.getWeather().get(0).getDescription());
-                    updateCurrentWeatherFeelsLike(currentWeatherModel.getMain().getFeelsLike());
-                    updateWindSpeed(currentWeatherModel.getWind().getSpeed());
-                    updatePressure(currentWeatherModel.getMain().getPressure());
-                    updateHumidity(currentWeatherModel.getMain().getHumidity());
+                .subscribe(this::updateCurrentWeather, throwable -> {
+
                 });
     }
 
+    public void updateCurrentWeather(CurrentWeatherModel currentWeatherModel){
+        updateCurrentLocation(currentWeatherModel.getName());
+        updateCurrentWeatherIcon(currentWeatherModel.getWeather().get(0).getIcon());
+        updateSunrise(currentWeatherModel.getSys().getSunrise());
+        updateCurrentTemperature(currentWeatherModel.getMain().getTemp());
+        updateSunset(currentWeatherModel.getSys().getSunset());
+        updateCurrentWeatherDescription(currentWeatherModel.getWeather().get(0).getDescription());
+        updateCurrentWeatherFeelsLike(currentWeatherModel.getMain().getFeelsLike());
+        updateWindSpeed(currentWeatherModel.getWind().getSpeed());
+        updatePressure(currentWeatherModel.getMain().getPressure());
+        updateHumidity(currentWeatherModel.getMain().getHumidity());
+    }
     private void startLocationManager() {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
     }
