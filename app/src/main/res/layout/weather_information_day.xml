@@ -1,37 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center"
-    android:orientation="horizontal"
-    android:paddingHorizontal="5dp"
-    android:background="@color/daily_background"
-    android:paddingVertical="5dp">
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/day_information_date"
-        android:layout_width="0dp"
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separatorColor" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textColor="@color/black" />
+        android:background="@color/daily_background"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="4dp">
 
-    <ImageView
-        android:id="@+id/day_information_icon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:contentDescription="@string/weather_icon_day"/>
+        <TextView
+            android:id="@+id/vTvDayDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            tools:text="@string/toolsDate" />
 
-    <TextView
-        android:id="@+id/day_information_temperature_day"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:textColor="@color/black" />
+        <ImageView
+            android:id="@+id/vIvDayIcon"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:contentDescription="@string/weather_icon_day"
+            tools:src="@drawable/unknown" />
 
-    <TextView
-        android:id="@+id/day_information_temperature_night"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:textSize="11sp" />
+        <TextView
+            android:id="@+id/vTvDayTemperatureDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textColor="@color/black"
+            tools:text="@string/toolsTemperature" />
+
+        <TextView
+            android:id="@+id/vTvDayTemperatureNight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textSize="11sp"
+            tools:text="@string/toolsTemperature" />
+
+    </LinearLayout>
+
+
 </LinearLayout>

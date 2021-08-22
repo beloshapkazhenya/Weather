@@ -1,12 +1,12 @@
 
-package com.example.weather.onecallmodel;
+package com.example.weather.models.onecall;
 
 import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
 @SuppressWarnings("unused")
-public class Daily {
+public class Current {
 
     @SerializedName("clouds")
     private Long mClouds;
@@ -15,17 +15,9 @@ public class Daily {
     @SerializedName("dt")
     private Long mDt;
     @SerializedName("feels_like")
-    private FeelsLike mFeelsLike;
+    private Double mFeelsLike;
     @SerializedName("humidity")
     private Long mHumidity;
-    @SerializedName("moon_phase")
-    private Double mMoonPhase;
-    @SerializedName("moonrise")
-    private Long mMoonrise;
-    @SerializedName("moonset")
-    private Long mMoonset;
-    @SerializedName("pop")
-    private float mPop;
     @SerializedName("pressure")
     private Long mPressure;
     @SerializedName("sunrise")
@@ -33,9 +25,11 @@ public class Daily {
     @SerializedName("sunset")
     private Long mSunset;
     @SerializedName("temp")
-    private Temp mTemp;
+    private Double mTemp;
     @SerializedName("uvi")
     private Double mUvi;
+    @SerializedName("visibility")
+    private Long mVisibility;
     @SerializedName("weather")
     private List<Weather> mWeather;
     @SerializedName("wind_deg")
@@ -69,11 +63,11 @@ public class Daily {
         mDt = dt;
     }
 
-    public FeelsLike getFeelsLike() {
+    public Double getFeelsLike() {
         return mFeelsLike;
     }
 
-    public void setFeelsLike(FeelsLike feelsLike) {
+    public void setFeelsLike(Double feelsLike) {
         mFeelsLike = feelsLike;
     }
 
@@ -83,38 +77,6 @@ public class Daily {
 
     public void setHumidity(Long humidity) {
         mHumidity = humidity;
-    }
-
-    public Double getMoonPhase() {
-        return mMoonPhase;
-    }
-
-    public void setMoonPhase(Double moonPhase) {
-        mMoonPhase = moonPhase;
-    }
-
-    public Long getMoonrise() {
-        return mMoonrise;
-    }
-
-    public void setMoonrise(Long moonrise) {
-        mMoonrise = moonrise;
-    }
-
-    public Long getMoonset() {
-        return mMoonset;
-    }
-
-    public void setMoonset(Long moonset) {
-        mMoonset = moonset;
-    }
-
-    public float getPop() {
-        return mPop;
-    }
-
-    public void setPop(float pop) {
-        mPop = pop;
     }
 
     public Long getPressure() {
@@ -141,11 +103,11 @@ public class Daily {
         mSunset = sunset;
     }
 
-    public Temp getTemp() {
+    public Double getTemp() {
         return mTemp;
     }
 
-    public void setTemp(Temp temp) {
+    public void setTemp(Double temp) {
         mTemp = temp;
     }
 
@@ -155,6 +117,14 @@ public class Daily {
 
     public void setUvi(Double uvi) {
         mUvi = uvi;
+    }
+
+    public Long getVisibility() {
+        return mVisibility;
+    }
+
+    public void setVisibility(Long visibility) {
+        mVisibility = visibility;
     }
 
     public List<Weather> getWeather() {

@@ -1,16 +1,16 @@
-package com.example.weather;
+package com.example.weather.api;
 
 import android.app.Application;
 
+import com.example.weather.service.WeatherCore;
+
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
 public class WeatherAPI extends Application {
-    private static CurrentWeatherCore currentWeatherCore;
-    private static OnecallWeatherCore onecallWeatherCore;
+    private static WeatherCore weatherCore;
     private static final String BASE_URL = "https://api.openweathermap.org/";
-
 
     @Override
     public void onCreate() {
@@ -18,17 +18,14 @@ public class WeatherAPI extends Application {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        currentWeatherCore = retrofit.create(CurrentWeatherCore.class);
-        onecallWeatherCore = retrofit.create(OnecallWeatherCore.class);
+        weatherCore = retrofit.create(WeatherCore.class);
     }
 
-    public static CurrentWeatherCore getCurrentWeather() {
-        return currentWeatherCore;
+    public static WeatherCore getWeather() {
+        return weatherCore;
     }
 
-    public static OnecallWeatherCore getWeatherCore() {
-        return onecallWeatherCore;
-    }
 }

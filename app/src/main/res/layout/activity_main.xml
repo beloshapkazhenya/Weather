@@ -2,23 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:orientation="vertical"
     android:padding="20dp"
-    tools:context=".MainActivity">
+    tools:context=".ui.mainscreen.MainActivity">
 
     <TextView
-        android:id="@+id/current_location"
+        android:id="@+id/vTvCurrentLocationTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        tools:text="@string/toolsLocation" />
 
     <LinearLayout
-        android:id="@+id/current_weather"
+        android:id="@+id/vLnLtCurrentWeather"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -28,124 +28,142 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingTop="10dp">
+            android:paddingTop="12dp">
 
             <TextView
-                android:id="@+id/current_temperature"
+                android:id="@+id/vTvCurrentTemperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textSize="32sp" />
+                android:textSize="32sp"
+                tools:text="@string/toolsTemperature" />
 
             <ImageView
-                android:id="@+id/current_weather_icon"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:contentDescription="@string/current_weather_icon" />
+                android:id="@+id/vIvCurrentWeatherIcon"
+                android:layout_width="68dp"
+                android:layout_height="68dp"
+                android:contentDescription="@string/current_weather_icon"
+                tools:src="@drawable/unknown" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="4dp"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/sunrise_time"
+                    android:id="@+id/vTvSunriseTime"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="4dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    app:drawableLeftCompat="@drawable/icon_sunrise" />
+                    app:drawableLeftCompat="@drawable/icon_sunrise"
+                    tools:text="@string/toolsTime" />
 
                 <TextView
-                    android:id="@+id/sunset_time"
+                    android:id="@+id/vTvSunsetTime"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="4dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    app:drawableLeftCompat="@drawable/icon_sunset" />
+                    app:drawableLeftCompat="@drawable/icon_sunset"
+                    tools:text="@string/toolsTime" />
+
             </LinearLayout>
+
         </LinearLayout>
 
         <TextView
-            android:id="@+id/current_weather_description"
+            android:id="@+id/vTvCurrentWeatherDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            tools:text="@string/toolsDescription" />
 
         <TextView
-            android:id="@+id/current_weather_feels_like"
+            android:id="@+id/vTvCurrentWeatherFeelsLike"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            tools:text="@string/toolsFeelsLike" />
+
     </LinearLayout>
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginTop="15dp"
-        android:scrollbars="none">
-
-        <LinearLayout
-            android:id="@+id/hour_information_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/current_weather_parameters"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                tools:ignore="UselessParent">
-
-                <TextView
-                    android:id="@+id/wind_speed"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/black"
-                    android:drawablePadding="5dp"
-                    app:drawableLeftCompat="@drawable/icon_wind" />
-
-                <TextView
-                    android:id="@+id/pressure"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:drawablePadding="5dp"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/black"
-                    app:drawableLeftCompat="@drawable/icon_pressure" />
-
-                <TextView
-                    android:id="@+id/humidity"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:drawablePadding="5dp"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/black"
-                    app:drawableLeftCompat="@drawable/icon_humidity" />
-            </LinearLayout>
-        </LinearLayout>
-    </HorizontalScrollView>
 
     <LinearLayout
-        android:id="@+id/day_information_layout"
+        android:id="@+id/vLnLtInformationField"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:divider="@drawable/separator"
-        android:orientation="vertical"
-        android:showDividers="beginning|middle|end">
+        android:layout_height="80dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/vLnLtWeatherParameters"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/vTvWindSpeed"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                app:drawableLeftCompat="@drawable/icon_wind"
+                tools:text="@string/toolsWindSpeed" />
+
+            <TextView
+                android:id="@+id/vTvPressure"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                app:drawableLeftCompat="@drawable/icon_pressure"
+                tools:text="@string/toolsPressure" />
+
+            <TextView
+                android:id="@+id/vTvHumidity"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                app:drawableLeftCompat="@drawable/icon_humidity"
+                tools:text="@string/toolsHumidity" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/vRvHourlyInformation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"
+            tools:listitem="@layout/weather_information_hour" />
 
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/vRvDailyInformation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_marginTop="8dp"
+        tools:listitem="@layout/weather_information_day" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separatorColor" />
+
 </LinearLayout>

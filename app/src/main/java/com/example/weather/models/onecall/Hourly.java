@@ -1,12 +1,12 @@
 
-package com.example.weather.onecallmodel;
+package com.example.weather.models.onecall;
 
 import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
 @SuppressWarnings("unused")
-public class Current {
+public class Hourly {
 
     @SerializedName("clouds")
     private Long mClouds;
@@ -18,12 +18,10 @@ public class Current {
     private Double mFeelsLike;
     @SerializedName("humidity")
     private Long mHumidity;
+    @SerializedName("pop")
+    private float mPop;
     @SerializedName("pressure")
     private Long mPressure;
-    @SerializedName("sunrise")
-    private Long mSunrise;
-    @SerializedName("sunset")
-    private Long mSunset;
     @SerializedName("temp")
     private Double mTemp;
     @SerializedName("uvi")
@@ -79,28 +77,20 @@ public class Current {
         mHumidity = humidity;
     }
 
+    public float getPop() {
+        return mPop;
+    }
+
+    public void setPop(float pop) {
+        mPop = pop;
+    }
+
     public Long getPressure() {
         return mPressure;
     }
 
     public void setPressure(Long pressure) {
         mPressure = pressure;
-    }
-
-    public Long getSunrise() {
-        return mSunrise;
-    }
-
-    public void setSunrise(Long sunrise) {
-        mSunrise = sunrise;
-    }
-
-    public Long getSunset() {
-        return mSunset;
-    }
-
-    public void setSunset(Long sunset) {
-        mSunset = sunset;
     }
 
     public Double getTemp() {
