@@ -8,18 +8,15 @@ public class MainLocal extends RealmObject {
     private Double feelsLike;
     private Integer pressure;
     private Integer humidity;
-    public MainLocal(){
-        temp = 0.0;
-        feelsLike = 0.0;
-        pressure = 0;
-        humidity = 0;
-    }
 
-    public MainLocal(Double temp, Double feelsLike, Integer pressure, Integer humidity){
+    public MainLocal(Double temp, Double feelsLike, Integer pressure, Integer humidity) {
         this.temp = temp;
         this.feelsLike = feelsLike;
         this.pressure = pressure;
         this.humidity = humidity;
+    }
+
+    public MainLocal() {
     }
 
     public Double getTemp() {

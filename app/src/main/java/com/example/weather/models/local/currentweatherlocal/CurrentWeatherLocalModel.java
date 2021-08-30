@@ -8,21 +8,12 @@ import io.realm.RealmObject;
 public class CurrentWeatherLocalModel extends RealmObject {
 
     private RealmList<WeatherLocal> weather;
-    private MainLocal mainLocal = null;
+    private MainLocal mainLocal;
     private Double windSpeed;
     private Integer dt;
     private String name;
     private Integer sunrise;
     private Integer sunset;
-
-    public CurrentWeatherLocalModel(){
-        windSpeed = 0.0;
-        weather=  new RealmList<WeatherLocal>();
-        dt = 0;
-        name = "";
-        sunrise = 0;
-        sunset = 0;
-    }
 
     public CurrentWeatherLocalModel(RealmList<WeatherLocal> weathers,
                                     MainLocal mainLocal,
@@ -30,7 +21,7 @@ public class CurrentWeatherLocalModel extends RealmObject {
                                     Integer dt,
                                     Integer sunrise,
                                     Integer sunset,
-                                    String name){
+                                    String name) {
         this.weather = weathers;
         this.mainLocal = mainLocal;
         this.windSpeed = windSpeed;
@@ -38,6 +29,9 @@ public class CurrentWeatherLocalModel extends RealmObject {
         this.sunrise = sunrise;
         this.sunset = sunset;
         this.name = name;
+    }
+
+    public CurrentWeatherLocalModel() {
     }
 
 

@@ -8,6 +8,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -16,13 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.weather.R;
 import com.example.weather.models.DayWeather;
 import com.example.weather.models.HourWeather;
-import com.example.weather.models.currentweather.CurrentWeatherModel;
 import com.example.weather.models.local.currentweatherlocal.CurrentWeatherLocalModel;
-import com.example.weather.models.local.currentweatherlocal.MainLocal;
-import com.example.weather.models.local.currentweatherlocal.WeatherLocal;
 import com.example.weather.models.onecall.Daily;
 import com.example.weather.models.onecall.Hourly;
-import com.example.weather.models.onecall.Weather;
 import com.example.weather.repository.WeatherRepository;
 import com.example.weather.ui.mainscreen.dailyadapter.DailyAdapter;
 import com.example.weather.ui.mainscreen.hourlyadapter.HourlyAdapter;
@@ -36,13 +33,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmList;
-
 
 public class MainActivity extends AppCompatActivity {
 
     private double latitude;
     private double longitude;
+
+    Realm localDatabase;
 
     LocationManager locationManager;
     LocationListener locationListener;
@@ -52,10 +49,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Realm.init(getApplicationContext());
-        RealmConfiguration config = new RealmConfiguration.Builder().name("currentWeatherData").build();
-        Realm.setDefaultConfiguration(config);
-
+        Realm.init(this);
+        String currentWeatherDatabaseName = "currentWeather";
+        RealmConfiguration configuration = new RealmConfiguration
+                .Builder()
+                .name(currentWeatherDatabaseName)
+                .allowQueriesOnUiThread(true)
+                .allowWritesOnUiThread(true)
+                .build();
+        localDatabase = Realm.getInstance(configuration);
+        updateCurrentWeatherFromLocal();
 
         int REQUEST_LOCATION = 1;
 
@@ -68,13 +71,25 @@ public class MainActivity extends AppCompatActivity {
             getWeather();
             stopLocationManager();
         };
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
+
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQUEST_LOCATION);
         }
+
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        localDatabase.close();
     }
 
     //TODO первоначальная отрисовка из realm с параллельным запросом, loader на время запроса
@@ -86,37 +101,62 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(oneCallModel -> {
                     updateHourlyRecyclerView(oneCallModel.getHourly());
                     updateDailyRecyclerView(oneCallModel.getDaily());
-
-                }, throwable -> {
-
-                });
+                }, throwable -> Toast.makeText(this,
+                        throwable.getLocalizedMessage(),
+                        Toast.LENGTH_LONG).show());
     }
-
-    //TODO переписать под realm
 
     public void getCurrentWeather() {
         new WeatherRepository().getCurrent(latitude, longitude)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(currentWeatherModel -> {
-                    updateCurrentWeather(currentWeatherModel);
-                    saveCurrentWeatherData(currentWeatherModel);
-                }, throwable -> {
+                .subscribe(this::onGetCurrentWeatherResponse, throwable -> Toast.makeText(this,
+                        throwable.getLocalizedMessage(),
+                        Toast.LENGTH_LONG).show());
+    }
 
-                });
+    public void updateCurrentWeatherFromLocal() {
+        CurrentWeatherLocalModel currentWeatherLocalModel = getCurrentWeatherData();
+        if (currentWeatherLocalModel != null) {
+            updateCurrentWeather(currentWeatherLocalModel);
+        }
+    }
+
+    public void onGetCurrentWeatherResponse(CurrentWeatherLocalModel currentWeatherModel) {
+        saveCurrentWeatherData(currentWeatherModel);
+        updateCurrentWeather(currentWeatherModel);
     }
 
     public void updateCurrentWeather(CurrentWeatherLocalModel currentWeatherLocalModel) {
-        updateCurrentLocation(currentWeatherLocalModel.getName());
-        updateCurrentWeatherIcon(currentWeatherLocalModel.getWeather().get(0).getIcon());
-        updateSunrise(currentWeatherLocalModel.getSunrise());
-        updateCurrentTemperature(currentWeatherLocalModel.getMain().getTemp());
-        updateSunset(currentWeatherLocalModel.getSunset());
-        updateCurrentWeatherDescription(currentWeatherLocalModel.getWeather().get(0).getDescription());
-        updateCurrentWeatherFeelsLike(currentWeatherLocalModel.getMain().getFeelsLike());
-        updateWindSpeed(currentWeatherLocalModel.getWindSpeed());
-        updatePressure(currentWeatherLocalModel.getMain().getPressure());
-        updateHumidity(currentWeatherLocalModel.getMain().getHumidity());
+
+        if (currentWeatherLocalModel.getName() != null) {
+            updateCurrentLocation(currentWeatherLocalModel.getName());
+        }
+
+        if (currentWeatherLocalModel.getWeather().size() > 0) {
+            updateCurrentWeatherIcon(currentWeatherLocalModel.getWeather().get(0).getIcon());
+            updateCurrentWeatherDescription(currentWeatherLocalModel.getWeather().get(0).getDescription());
+        }
+
+        if (currentWeatherLocalModel.getMain() != null) {
+            updatePressure(currentWeatherLocalModel.getMain().getPressure());
+            updateHumidity(currentWeatherLocalModel.getMain().getHumidity());
+            updateCurrentTemperature(currentWeatherLocalModel.getMain().getTemp());
+            updateCurrentWeatherFeelsLike(currentWeatherLocalModel.getMain().getFeelsLike());
+        }
+
+        if (currentWeatherLocalModel.getSunrise() != null) {
+            updateSunrise(currentWeatherLocalModel.getSunrise());
+        }
+
+        if (currentWeatherLocalModel.getSunset() != null) {
+            updateSunset(currentWeatherLocalModel.getSunset());
+        }
+
+        if (currentWeatherLocalModel.getWindSpeed() != null) {
+            updateWindSpeed(currentWeatherLocalModel.getWindSpeed());
+        }
+
     }
 
     private void startLocationManager() {
@@ -129,29 +169,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void saveCurrentWeatherData(CurrentWeatherLocalModel currentWeatherLocalModels) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(realmTransaction -> {
-            CurrentWeatherLocalModel currentWeatherData = realmTransaction.createObject(CurrentWeatherLocalModel.class);
-            MainLocal mainLocal = realmTransaction.createObject(MainLocal.class);
-            currentWeatherData.setDt(currentWeatherLocalModels.getDt());
-            currentWeatherData.setName(currentWeatherLocalModels.getName());
-            currentWeatherData.setSunrise(currentWeatherLocalModels.getSunrise());
-            currentWeatherData.setSunset(currentWeatherLocalModels.getSunset());
-            currentWeatherData.setWindSpeed(currentWeatherLocalModels.getWindSpeed());
-            mainLocal.setHumidity(currentWeatherLocalModels.getMain().getHumidity());
-            mainLocal.setPressure(currentWeatherLocalModels.getMain().getPressure());
-            mainLocal.setTemp(currentWeatherLocalModels.getMain().getTemp());
-            mainLocal.setFeelsLike(currentWeatherLocalModels.getMain().getFeelsLike());
-            currentWeatherData.setMain(mainLocal);
-            RealmList<WeatherLocal> weatherLocals = new RealmList<WeatherLocal>();
-            WeatherLocal weatherLocal = realmTransaction.createObject(WeatherLocal.class);
-            weatherLocal.setDescription(currentWeatherLocalModels.getWeather().get(0).getDescription());
-            weatherLocal.setIcon(currentWeatherLocalModels.getWeather().get(0).getIcon());
-            weatherLocals.add(0, weatherLocal);
+        localDatabase.executeTransaction(realm -> realm.insertOrUpdate(currentWeatherLocalModels));
+    }
 
-
-        });
-
+    public CurrentWeatherLocalModel getCurrentWeatherData() {
+        CurrentWeatherLocalModel currentWeatherLocal = localDatabase.where(CurrentWeatherLocalModel.class).findFirst();
+        return currentWeatherLocal != null ? localDatabase.copyFromRealm(currentWeatherLocal) : null;
     }
 
     public void updateHourlyRecyclerView(List<Hourly> list) {

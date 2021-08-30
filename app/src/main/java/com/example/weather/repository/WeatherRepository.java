@@ -1,13 +1,11 @@
 package com.example.weather.repository;
 
-
 import com.example.weather.api.WeatherAPI;
 import com.example.weather.models.local.currentweatherlocal.CurrentWeatherLocalModel;
 import com.example.weather.models.local.currentweatherlocal.MainLocal;
 import com.example.weather.models.local.currentweatherlocal.WeatherLocal;
 import com.example.weather.models.onecall.OneCallModel;
 
-import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import io.reactivex.Observable;

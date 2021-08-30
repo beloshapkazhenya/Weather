@@ -7,14 +7,12 @@ public class WeatherLocal extends RealmObject {
     private String description;
     private String icon;
 
-    public WeatherLocal(){
-        description = "";
-        icon = "";
-    }
-
     public WeatherLocal(String description, String icon) {
         this.description = description;
         this.icon = icon;
+    }
+
+    public WeatherLocal() {
     }
 
     public String getDescription() {
