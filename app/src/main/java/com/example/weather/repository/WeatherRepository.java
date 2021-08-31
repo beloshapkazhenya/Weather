@@ -6,7 +6,7 @@ import com.example.weather.models.local.currentweatherlocal.MainLocal;
 import com.example.weather.models.local.currentweatherlocal.WeatherLocal;
 import com.example.weather.models.local.onecalllocal.DayLocal;
 import com.example.weather.models.local.onecalllocal.HourLocal;
-import com.example.weather.models.local.onecalllocal.OneCallLocalModel;
+import com.example.weather.models.local.onecalllocal.OnecallLocalModel;
 
 import java.util.stream.Collectors;
 
@@ -45,12 +45,12 @@ public class WeatherRepository {
                 ));
     }
 
-    public Observable<OneCallLocalModel> getWeather(double latitude, double longitude) {
+    public Observable<OnecallLocalModel> getWeather(double latitude, double longitude) {
         String EXCLUDE = "minutely,alert,currents";
         return WeatherAPI
                 .getWeather()
                 .getOnecall(latitude, longitude, API_KEY, LANGUAGE, UNITS, EXCLUDE)
-                .map(oneCallModel -> new OneCallLocalModel(
+                .map(oneCallModel -> new OnecallLocalModel(
                         oneCallModel
                                 .getHourly()
                                 .stream()

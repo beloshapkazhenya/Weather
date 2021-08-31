@@ -5,17 +5,17 @@ import java.util.List;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
-public class OneCallLocalModel extends RealmObject {
+public class OnecallLocalModel extends RealmObject {
     RealmList<HourLocal> hourLocals;
     RealmList<DayLocal> dayLocals;
 
-    public OneCallLocalModel(RealmList<HourLocal> hourLocals,
+    public OnecallLocalModel(RealmList<HourLocal> hourLocals,
                              RealmList<DayLocal> dayLocals) {
         this.hourLocals = hourLocals;
         this.dayLocals = dayLocals;
     }
 
-    public OneCallLocalModel() {
+    public OnecallLocalModel() {
 
     }
 

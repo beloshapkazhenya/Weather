@@ -26,7 +26,7 @@ import com.example.weather.models.HourWeather;
 import com.example.weather.models.local.currentweatherlocal.CurrentWeatherLocalModel;
 import com.example.weather.models.local.onecalllocal.DayLocal;
 import com.example.weather.models.local.onecalllocal.HourLocal;
-import com.example.weather.models.local.onecalllocal.OneCallLocalModel;
+import com.example.weather.models.local.onecalllocal.OnecallLocalModel;
 import com.example.weather.repository.WeatherRepository;
 import com.example.weather.ui.mainscreen.dailyadapter.DailyAdapter;
 import com.example.weather.ui.mainscreen.hourlyadapter.HourlyAdapter;
@@ -132,15 +132,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateOneCallWeatherFromLocal() {
-        OneCallLocalModel onecallLocalModel = getOneCallWeatherData();
+        OnecallLocalModel onecallLocalModel = getOneCallWeatherData();
         if (onecallLocalModel != null) {
             updateOneCallWeather(onecallLocalModel);
         }
     }
 
-    public OneCallLocalModel getOneCallWeatherData() {
-        OneCallLocalModel onecallLocalModel = oneCallWeatherDatabase
-                .where(OneCallLocalModel.class)
+    public OnecallLocalModel getOneCallWeatherData() {
+        OnecallLocalModel onecallLocalModel = oneCallWeatherDatabase
+                .where(OnecallLocalModel.class)
                 .findFirst();
         return onecallLocalModel != null ? oneCallWeatherDatabase.copyFromRealm(onecallLocalModel) : null;
     }
@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
     //response actions
 
-    public void onGetOneCallWeatherResponse(OneCallLocalModel onecallLocalModel) {
+    public void onGetOneCallWeatherResponse(OnecallLocalModel onecallLocalModel) {
         saveOneCallWeatherData(onecallLocalModel);
         updateOneCallWeather(onecallLocalModel);
     }
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
 
     //updating UI
 
-    public void updateOneCallWeather(OneCallLocalModel onecallLocalModel) {
+    public void updateOneCallWeather(OnecallLocalModel onecallLocalModel) {
         if (onecallLocalModel.getHourLocals().size() > 0) {
             updateHourlyRecyclerView(onecallLocalModel.getHourLocals());
         }
@@ -347,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
         currentWeatherLocalDatabase.executeTransaction(realm -> realm.insertOrUpdate(currentWeatherLocalModels));
     }
 
-    public void saveOneCallWeatherData(OneCallLocalModel onecallLocalModel) {
+    public void saveOneCallWeatherData(OnecallLocalModel onecallLocalModel) {
         oneCallWeatherDatabase.executeTransaction(realm -> realm.insertOrUpdate(onecallLocalModel));
     }
 
