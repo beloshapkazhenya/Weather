@@ -4,8 +4,6 @@ import com.example.weather.models.DayWeather;
 import com.example.weather.models.HourWeather;
 import com.example.weather.models.local.onecalllocal.DayLocal;
 import com.example.weather.models.local.onecalllocal.HourLocal;
-import com.example.weather.models.onecall.Daily;
-import com.example.weather.models.onecall.Hourly;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,9 +28,16 @@ public class HelperMethods {
         return sdf.format(date);
     }
 
-    public static String getDate(long decimal) {
+    public static String getShortDate(long decimal) {
         Date date = new java.util.Date(decimal * 1000L);
         SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd MMM", Locale.getDefault());
+        sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT+3"));
+        return sdf.format(date);
+    }
+
+    public static String getFullDate(long decimal) {
+        Date date = new java.util.Date(decimal * 1000L);
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd MMMM", Locale.getDefault());
         sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT+3"));
         return sdf.format(date);
     }
@@ -55,7 +60,7 @@ public class HelperMethods {
         for (int i = 0; i < list.toArray().length; i++) {
             hourWeathers.add(new HourWeather(
                     HelperMethods.getTime(list.get(i).getDt()),
-                    HelperMethods.getDate(list.get(i).getDt()),
+                    HelperMethods.getShortDate(list.get(i).getDt()),
                     list.get(i).getIconId(),
                     HelperMethods.temperatureToString(list.get(i).getTemperature())
             ));
@@ -67,7 +72,7 @@ public class HelperMethods {
         ArrayList<DayWeather> dayWeathers = new ArrayList<>();
         for (int i = 0; i < list.toArray().length; i++) {
             dayWeathers.add(new DayWeather(
-                    HelperMethods.getDate(list.get(i).getDt()),
+                    HelperMethods.getFullDate(list.get(i).getDt()),
                     list.get(i).getIconId(),
                     HelperMethods.temperatureToString(list.get(i).getTemperatureDay()),
                     HelperMethods.temperatureToString(list.get(i).getTemperatureNight())

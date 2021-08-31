@@ -1,11 +1,9 @@
 
 package com.example.weather.models.onecall;
 
-import java.util.List;
-
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmObject;
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class Current {

@@ -26,7 +26,7 @@ import com.example.weather.models.HourWeather;
 import com.example.weather.models.local.currentweatherlocal.CurrentWeatherLocalModel;
 import com.example.weather.models.local.onecalllocal.DayLocal;
 import com.example.weather.models.local.onecalllocal.HourLocal;
-import com.example.weather.models.local.onecalllocal.OnecallLocalModel;
+import com.example.weather.models.local.onecalllocal.OneCallLocalModel;
 import com.example.weather.repository.WeatherRepository;
 import com.example.weather.ui.mainscreen.dailyadapter.DailyAdapter;
 import com.example.weather.ui.mainscreen.hourlyadapter.HourlyAdapter;
@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
     LocationListener locationListener;
 
     ProgressBar progressBar;
-
     LinearLayout mainLayout;
     GestureDetectorCompat swipeDetector;
 
@@ -73,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         updateUiFromLocal();
 
-        updateWeatherFromAPI();
+        updateUIFromAPI();
     }
 
     @Override
@@ -82,42 +81,11 @@ public class MainActivity extends AppCompatActivity {
         currentWeatherLocalDatabase.close();
     }
 
-    public void startLoadingDataFromApi() {
-        progressBar.setVisibility(ProgressBar.VISIBLE);
-    }
+    //Realm configuration
 
-    public void stopLoadingDataFromApi() {
-        progressBar.setVisibility(ProgressBar.INVISIBLE);
-    }
-
-    public void updateWeatherFromAPI() {
-        startLoadingDataFromApi();
-        checkLocationPermission();
-        startLocationManager();
-
-        locationListener = location -> {
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-            getCurrentWeather();
-            getWeather();
-            stopLocationManager();
-        };
-
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-    }
-
-    public void checkLocationPermission() {
-        int REQUEST_LOCATION = 1;
-        if (ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this,
-                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION},
-                    REQUEST_LOCATION);
-        }
+    public void getRealmConfiguration() {
+        getCurrentWeatherRealmConfiguration();
+        getOneCallWeatherRealmConfiguration();
     }
 
     public void getCurrentWeatherRealmConfiguration() {
@@ -142,14 +110,98 @@ public class MainActivity extends AppCompatActivity {
         oneCallWeatherDatabase = Realm.getInstance(oneCallConfiguration);
     }
 
-    public void getRealmConfiguration() {
-        getCurrentWeatherRealmConfiguration();
-        getOneCallWeatherRealmConfiguration();
+    //updating UI from local database
+
+    public void updateUiFromLocal() {
+        updateCurrentWeatherFromLocal();
+        updateOneCallWeatherFromLocal();
     }
 
-    //TODO первоначальная отрисовка из realm с параллельным запросом, loader на время запроса
+    public void updateCurrentWeatherFromLocal() {
+        CurrentWeatherLocalModel currentWeatherLocalModel = getCurrentWeatherData();
+        if (currentWeatherLocalModel != null) {
+            updateCurrentWeather(currentWeatherLocalModel);
+        }
+    }
 
-    public void getWeather() {
+    public CurrentWeatherLocalModel getCurrentWeatherData() {
+        CurrentWeatherLocalModel currentWeatherLocal = currentWeatherLocalDatabase
+                .where(CurrentWeatherLocalModel.class)
+                .findFirst();
+        return currentWeatherLocal != null ? currentWeatherLocalDatabase.copyFromRealm(currentWeatherLocal) : null;
+    }
+
+    public void updateOneCallWeatherFromLocal() {
+        OneCallLocalModel onecallLocalModel = getOneCallWeatherData();
+        if (onecallLocalModel != null) {
+            updateOneCallWeather(onecallLocalModel);
+        }
+    }
+
+    public OneCallLocalModel getOneCallWeatherData() {
+        OneCallLocalModel onecallLocalModel = oneCallWeatherDatabase
+                .where(OneCallLocalModel.class)
+                .findFirst();
+        return onecallLocalModel != null ? oneCallWeatherDatabase.copyFromRealm(onecallLocalModel) : null;
+    }
+
+    //updating UI from API
+
+    public void updateUIFromAPI() {
+        startLoadingDataFromApi();
+        checkLocationPermission();
+        startLocationManager();
+
+        locationListener = location -> {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+            getCurrentWeather();
+            getOneCallWeather();
+            stopLocationManager();
+        };
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+    }
+
+    //location manager
+
+    public void checkLocationPermission() {
+        int REQUEST_LOCATION = 1;
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQUEST_LOCATION);
+        }
+    }
+
+    private void startLocationManager() {
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+    }
+
+    private void stopLocationManager() {
+        locationManager.removeUpdates(locationListener);
+        locationManager = null;
+        stopLoadingDataFromApi();
+    }
+
+    //progress bar
+
+    public void startLoadingDataFromApi() {
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+    }
+
+    public void stopLoadingDataFromApi() {
+        progressBar.setVisibility(ProgressBar.INVISIBLE);
+    }
+
+    //receiving data from API
+
+    public void getOneCallWeather() {
         new WeatherRepository().getWeather(latitude, longitude)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -167,38 +219,41 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG).show());
     }
 
-    public void updateUiFromLocal() {
-        updateCurrentWeatherFromLocal();
-        updateOneCallWeatherFromLocal();
-    }
+    //response actions
 
-    public void onGetOneCallWeatherResponse(OnecallLocalModel onecallLocalModel) {
+    public void onGetOneCallWeatherResponse(OneCallLocalModel onecallLocalModel) {
         saveOneCallWeatherData(onecallLocalModel);
         updateOneCallWeather(onecallLocalModel);
-    }
-
-    public void updateOneCallWeather(OnecallLocalModel onecallLocalModel) {
-        updateHourlyRecyclerView(onecallLocalModel.getHourLocals());
-        updateDailyRecyclerView(onecallLocalModel.getDayLocals());
-    }
-
-    public void updateCurrentWeatherFromLocal() {
-        CurrentWeatherLocalModel currentWeatherLocalModel = getCurrentWeatherData();
-        if (currentWeatherLocalModel != null) {
-            updateCurrentWeather(currentWeatherLocalModel);
-        }
-    }
-
-    public void updateOneCallWeatherFromLocal() {
-        OnecallLocalModel onecallLocalModel = getOneCallWeatherData();
-        if (onecallLocalModel != null) {
-            updateOneCallWeather(onecallLocalModel);
-        }
     }
 
     public void onGetCurrentWeatherResponse(CurrentWeatherLocalModel currentWeatherModel) {
         saveCurrentWeatherData(currentWeatherModel);
         updateCurrentWeather(currentWeatherModel);
+    }
+
+    //updating UI
+
+    public void updateOneCallWeather(OneCallLocalModel onecallLocalModel) {
+        if (onecallLocalModel.getHourLocals().size() > 0) {
+            updateHourlyRecyclerView(onecallLocalModel.getHourLocals());
+        }
+        if (onecallLocalModel.getDayLocals().size() > 0) {
+            updateDailyRecyclerView(onecallLocalModel.getDayLocals());
+        }
+    }
+
+    public void updateHourlyRecyclerView(List<HourLocal> list) {
+        RecyclerView rvHourWeather = findViewById(R.id.vRvHourlyInformation);
+        ArrayList<HourWeather> hourWeathers = HelperMethods.createHourWeatherList(list);
+        HourlyAdapter hourlyAdapter = new HourlyAdapter(hourWeathers);
+        rvHourWeather.setAdapter(hourlyAdapter);
+    }
+
+    public void updateDailyRecyclerView(List<DayLocal> list) {
+        RecyclerView rvDailyWeather = findViewById(R.id.vRvDailyInformation);
+        ArrayList<DayWeather> dayWeathers = HelperMethods.createDayWeatherList(list);
+        DailyAdapter dailyAdapter = new DailyAdapter(dayWeathers);
+        rvDailyWeather.setAdapter(dailyAdapter);
     }
 
     public void updateCurrentWeather(CurrentWeatherLocalModel currentWeatherLocalModel) {
@@ -233,78 +288,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void startLocationManager() {
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-    }
-
-    private void stopLocationManager() {
-        locationManager.removeUpdates(locationListener);
-        locationManager = null;
-        stopLoadingDataFromApi();
-    }
-
-    public void saveCurrentWeatherData(CurrentWeatherLocalModel currentWeatherLocalModels) {
-        currentWeatherLocalDatabase.executeTransaction(realm -> realm.insertOrUpdate(currentWeatherLocalModels));
-    }
-
-    public void saveOneCallWeatherData(OnecallLocalModel onecallLocalModel) {
-        oneCallWeatherDatabase.executeTransaction(realm -> realm.insertOrUpdate(onecallLocalModel));
-    }
-
-    public CurrentWeatherLocalModel getCurrentWeatherData() {
-        CurrentWeatherLocalModel currentWeatherLocal = currentWeatherLocalDatabase.where(CurrentWeatherLocalModel.class).findFirst();
-        return currentWeatherLocal != null ? currentWeatherLocalDatabase.copyFromRealm(currentWeatherLocal) : null;
-    }
-
-    public OnecallLocalModel getOneCallWeatherData() {
-        OnecallLocalModel onecallLocalModel = oneCallWeatherDatabase.where(OnecallLocalModel.class).findFirst();
-        return onecallLocalModel != null ? oneCallWeatherDatabase.copyFromRealm(onecallLocalModel) : null;
-    }
-
-    public void updateHourlyRecyclerView(List<HourLocal> list) {
-        RecyclerView rvHourWeather = findViewById(R.id.vRvHourlyInformation);
-        ArrayList<HourWeather> hourWeathers = HelperMethods.createHourWeatherList(list);
-        HourlyAdapter hourlyAdapter = new HourlyAdapter(hourWeathers);
-        rvHourWeather.setAdapter(hourlyAdapter);
-    }
-
-    public void updateDailyRecyclerView(List<DayLocal> list) {
-        RecyclerView rvDailyWeather = findViewById(R.id.vRvDailyInformation);
-        ArrayList<DayWeather> dayWeathers = HelperMethods.createDayWeatherList(list);
-        DailyAdapter dailyAdapter = new DailyAdapter(dayWeathers);
-        rvDailyWeather.setAdapter(dailyAdapter);
-
-    }
-
-    public void updateWindSpeed(double windSpeed) {
-        TextView windTextView = findViewById(R.id.vTvWindSpeed);
-        windTextView.setText(HelperMethods.windSpeedToString(windSpeed));
-    }
-
-    public void updatePressure(int pressure) {
-        TextView pressureTextView = findViewById(R.id.vTvPressure);
-        pressureTextView.setText(HelperMethods.pressureToString(pressure));
-    }
-
-    public void updateHumidity(int humidity) {
-        TextView humidityTextView = findViewById(R.id.vTvHumidity);
-        String humidityString = humidity + "%";
-        humidityTextView.setText(humidityString);
-    }
-
     public void updateCurrentLocation(String location) {
         TextView locationTextView = findViewById(R.id.vTvCurrentLocationTitle);
         locationTextView.setText(location);
-    }
-
-    public void updateSunrise(long sunrise) {
-        TextView sunriseTextView = findViewById(R.id.vTvSunriseTime);
-        sunriseTextView.setText(HelperMethods.getTime(sunrise));
-    }
-
-    public void updateSunset(long sunset) {
-        TextView sunriseTextView = findViewById(R.id.vTvSunsetTime);
-        sunriseTextView.setText(HelperMethods.getTime(sunset));
     }
 
     public void updateCurrentWeatherIcon(String iconId) {
@@ -318,16 +304,54 @@ public class MainActivity extends AppCompatActivity {
         descriptionTextView.setText(description);
     }
 
-    public void updateCurrentWeatherFeelsLike(double feelsLike) {
-        TextView feelsLikeTextView = findViewById(R.id.vTvCurrentWeatherFeelsLike);
-        String feelsLikeString = "Ощущается как: " + HelperMethods.temperatureToString(feelsLike);
-        feelsLikeTextView.setText(feelsLikeString);
+    public void updatePressure(int pressure) {
+        TextView pressureTextView = findViewById(R.id.vTvPressure);
+        pressureTextView.setText(HelperMethods.pressureToString(pressure));
+    }
+
+    public void updateHumidity(int humidity) {
+        TextView humidityTextView = findViewById(R.id.vTvHumidity);
+        String humidityString = humidity + "%";
+        humidityTextView.setText(humidityString);
     }
 
     public void updateCurrentTemperature(double temperature) {
         TextView currentTemperature = findViewById(R.id.vTvCurrentTemperature);
         currentTemperature.setText(HelperMethods.temperatureToString(temperature));
     }
+
+    public void updateCurrentWeatherFeelsLike(double feelsLike) {
+        TextView feelsLikeTextView = findViewById(R.id.vTvCurrentWeatherFeelsLike);
+        String feelsLikeString = "Ощущается как: " + HelperMethods.temperatureToString(feelsLike);
+        feelsLikeTextView.setText(feelsLikeString);
+    }
+
+    public void updateSunrise(long sunrise) {
+        TextView sunriseTextView = findViewById(R.id.vTvSunriseTime);
+        sunriseTextView.setText(HelperMethods.getTime(sunrise));
+    }
+
+    public void updateSunset(long sunset) {
+        TextView sunriseTextView = findViewById(R.id.vTvSunsetTime);
+        sunriseTextView.setText(HelperMethods.getTime(sunset));
+    }
+
+    public void updateWindSpeed(double windSpeed) {
+        TextView windTextView = findViewById(R.id.vTvWindSpeed);
+        windTextView.setText(HelperMethods.windSpeedToString(windSpeed));
+    }
+
+    //saving data
+
+    public void saveCurrentWeatherData(CurrentWeatherLocalModel currentWeatherLocalModels) {
+        currentWeatherLocalDatabase.executeTransaction(realm -> realm.insertOrUpdate(currentWeatherLocalModels));
+    }
+
+    public void saveOneCallWeatherData(OneCallLocalModel onecallLocalModel) {
+        oneCallWeatherDatabase.executeTransaction(realm -> realm.insertOrUpdate(onecallLocalModel));
+    }
+
+    //swipe listener
 
     private class SwipeGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
@@ -344,7 +368,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
             if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_MIN_VELOCITY) {
-                updateWeatherFromAPI();
+                updateUIFromAPI();
             }
             return false;
         }
