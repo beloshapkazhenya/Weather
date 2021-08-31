@@ -1,25 +1,32 @@
 package com.example.weather.ui.mainscreen;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.view.GestureDetectorCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weather.R;
 import com.example.weather.models.DayWeather;
 import com.example.weather.models.HourWeather;
 import com.example.weather.models.local.currentweatherlocal.CurrentWeatherLocalModel;
-import com.example.weather.models.onecall.Daily;
-import com.example.weather.models.onecall.Hourly;
+import com.example.weather.models.local.onecalllocal.DayLocal;
+import com.example.weather.models.local.onecalllocal.HourLocal;
+import com.example.weather.models.local.onecalllocal.OnecallLocalModel;
 import com.example.weather.repository.WeatherRepository;
 import com.example.weather.ui.mainscreen.dailyadapter.DailyAdapter;
 import com.example.weather.ui.mainscreen.hourlyadapter.HourlyAdapter;
@@ -39,29 +46,53 @@ public class MainActivity extends AppCompatActivity {
     private double latitude;
     private double longitude;
 
-    Realm localDatabase;
+    Realm currentWeatherLocalDatabase;
+    Realm oneCallWeatherDatabase;
 
     LocationManager locationManager;
     LocationListener locationListener;
 
+    ProgressBar progressBar;
+
+    LinearLayout mainLayout;
+    GestureDetectorCompat swipeDetector;
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        progressBar = findViewById(R.id.vPbProgressBar);
+        mainLayout = findViewById(R.id.vLnLtMainView);
+
+        swipeDetector = new GestureDetectorCompat(this, new SwipeGestureListener());
+        mainLayout.setOnTouchListener((v, event) -> swipeDetector.onTouchEvent(event));
 
         Realm.init(this);
-        String currentWeatherDatabaseName = "currentWeather";
-        RealmConfiguration configuration = new RealmConfiguration
-                .Builder()
-                .name(currentWeatherDatabaseName)
-                .allowQueriesOnUiThread(true)
-                .allowWritesOnUiThread(true)
-                .build();
-        localDatabase = Realm.getInstance(configuration);
-        updateCurrentWeatherFromLocal();
+        getRealmConfiguration();
 
-        int REQUEST_LOCATION = 1;
+        updateUiFromLocal();
 
+        updateWeatherFromAPI();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        currentWeatherLocalDatabase.close();
+    }
+
+    public void startLoadingDataFromApi() {
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+    }
+
+    public void stopLoadingDataFromApi() {
+        progressBar.setVisibility(ProgressBar.INVISIBLE);
+    }
+
+    public void updateWeatherFromAPI() {
+        startLoadingDataFromApi();
+        checkLocationPermission();
         startLocationManager();
 
         locationListener = location -> {
@@ -72,6 +103,12 @@ public class MainActivity extends AppCompatActivity {
             stopLocationManager();
         };
 
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+    }
+
+    public void checkLocationPermission() {
+        int REQUEST_LOCATION = 1;
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this,
@@ -81,15 +118,33 @@ public class MainActivity extends AppCompatActivity {
                             Manifest.permission.ACCESS_COARSE_LOCATION},
                     REQUEST_LOCATION);
         }
-
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        localDatabase.close();
+    public void getCurrentWeatherRealmConfiguration() {
+        String currentWeatherDatabaseName = "currentWeather";
+        RealmConfiguration currentWeatherConfiguration = new RealmConfiguration
+                .Builder()
+                .name(currentWeatherDatabaseName)
+                .allowQueriesOnUiThread(true)
+                .allowWritesOnUiThread(true)
+                .build();
+        currentWeatherLocalDatabase = Realm.getInstance(currentWeatherConfiguration);
+    }
+
+    public void getOneCallWeatherRealmConfiguration() {
+        String oneCallDatabaseName = "oneCallWeather";
+        RealmConfiguration oneCallConfiguration = new RealmConfiguration
+                .Builder()
+                .name(oneCallDatabaseName)
+                .allowQueriesOnUiThread(true)
+                .allowWritesOnUiThread(true)
+                .build();
+        oneCallWeatherDatabase = Realm.getInstance(oneCallConfiguration);
+    }
+
+    public void getRealmConfiguration() {
+        getCurrentWeatherRealmConfiguration();
+        getOneCallWeatherRealmConfiguration();
     }
 
     //TODO первоначальная отрисовка из realm с параллельным запросом, loader на время запроса
@@ -98,10 +153,7 @@ public class MainActivity extends AppCompatActivity {
         new WeatherRepository().getWeather(latitude, longitude)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(oneCallModel -> {
-                    updateHourlyRecyclerView(oneCallModel.getHourly());
-                    updateDailyRecyclerView(oneCallModel.getDaily());
-                }, throwable -> Toast.makeText(this,
+                .subscribe(this::onGetOneCallWeatherResponse, throwable -> Toast.makeText(this,
                         throwable.getLocalizedMessage(),
                         Toast.LENGTH_LONG).show());
     }
@@ -115,10 +167,32 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG).show());
     }
 
+    public void updateUiFromLocal() {
+        updateCurrentWeatherFromLocal();
+        updateOneCallWeatherFromLocal();
+    }
+
+    public void onGetOneCallWeatherResponse(OnecallLocalModel onecallLocalModel) {
+        saveOneCallWeatherData(onecallLocalModel);
+        updateOneCallWeather(onecallLocalModel);
+    }
+
+    public void updateOneCallWeather(OnecallLocalModel onecallLocalModel) {
+        updateHourlyRecyclerView(onecallLocalModel.getHourLocals());
+        updateDailyRecyclerView(onecallLocalModel.getDayLocals());
+    }
+
     public void updateCurrentWeatherFromLocal() {
         CurrentWeatherLocalModel currentWeatherLocalModel = getCurrentWeatherData();
         if (currentWeatherLocalModel != null) {
             updateCurrentWeather(currentWeatherLocalModel);
+        }
+    }
+
+    public void updateOneCallWeatherFromLocal() {
+        OnecallLocalModel onecallLocalModel = getOneCallWeatherData();
+        if (onecallLocalModel != null) {
+            updateOneCallWeather(onecallLocalModel);
         }
     }
 
@@ -166,25 +240,35 @@ public class MainActivity extends AppCompatActivity {
     private void stopLocationManager() {
         locationManager.removeUpdates(locationListener);
         locationManager = null;
+        stopLoadingDataFromApi();
     }
 
     public void saveCurrentWeatherData(CurrentWeatherLocalModel currentWeatherLocalModels) {
-        localDatabase.executeTransaction(realm -> realm.insertOrUpdate(currentWeatherLocalModels));
+        currentWeatherLocalDatabase.executeTransaction(realm -> realm.insertOrUpdate(currentWeatherLocalModels));
+    }
+
+    public void saveOneCallWeatherData(OnecallLocalModel onecallLocalModel) {
+        oneCallWeatherDatabase.executeTransaction(realm -> realm.insertOrUpdate(onecallLocalModel));
     }
 
     public CurrentWeatherLocalModel getCurrentWeatherData() {
-        CurrentWeatherLocalModel currentWeatherLocal = localDatabase.where(CurrentWeatherLocalModel.class).findFirst();
-        return currentWeatherLocal != null ? localDatabase.copyFromRealm(currentWeatherLocal) : null;
+        CurrentWeatherLocalModel currentWeatherLocal = currentWeatherLocalDatabase.where(CurrentWeatherLocalModel.class).findFirst();
+        return currentWeatherLocal != null ? currentWeatherLocalDatabase.copyFromRealm(currentWeatherLocal) : null;
     }
 
-    public void updateHourlyRecyclerView(List<Hourly> list) {
+    public OnecallLocalModel getOneCallWeatherData() {
+        OnecallLocalModel onecallLocalModel = oneCallWeatherDatabase.where(OnecallLocalModel.class).findFirst();
+        return onecallLocalModel != null ? oneCallWeatherDatabase.copyFromRealm(onecallLocalModel) : null;
+    }
+
+    public void updateHourlyRecyclerView(List<HourLocal> list) {
         RecyclerView rvHourWeather = findViewById(R.id.vRvHourlyInformation);
         ArrayList<HourWeather> hourWeathers = HelperMethods.createHourWeatherList(list);
         HourlyAdapter hourlyAdapter = new HourlyAdapter(hourWeathers);
         rvHourWeather.setAdapter(hourlyAdapter);
     }
 
-    public void updateDailyRecyclerView(List<Daily> list) {
+    public void updateDailyRecyclerView(List<DayLocal> list) {
         RecyclerView rvDailyWeather = findViewById(R.id.vRvDailyInformation);
         ArrayList<DayWeather> dayWeathers = HelperMethods.createDayWeatherList(list);
         DailyAdapter dailyAdapter = new DailyAdapter(dayWeathers);
@@ -243,6 +327,27 @@ public class MainActivity extends AppCompatActivity {
     public void updateCurrentTemperature(double temperature) {
         TextView currentTemperature = findViewById(R.id.vTvCurrentTemperature);
         currentTemperature.setText(HelperMethods.temperatureToString(temperature));
+    }
+
+    private class SwipeGestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            int SWIPE_MIN_DISTANCE = 100;
+            int SWIPE_MIN_VELOCITY = 200;
+
+            if (Math.abs(e1.getY() - e2.getY()) < SWIPE_MIN_DISTANCE) {
+                return false;
+            }
+            if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_MIN_VELOCITY) {
+                updateWeatherFromAPI();
+            }
+            return false;
+        }
     }
 }
 

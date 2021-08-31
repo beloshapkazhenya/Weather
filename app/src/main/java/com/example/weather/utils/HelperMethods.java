@@ -2,6 +2,8 @@ package com.example.weather.utils;
 
 import com.example.weather.models.DayWeather;
 import com.example.weather.models.HourWeather;
+import com.example.weather.models.local.onecalllocal.DayLocal;
+import com.example.weather.models.local.onecalllocal.HourLocal;
 import com.example.weather.models.onecall.Daily;
 import com.example.weather.models.onecall.Hourly;
 
@@ -48,27 +50,27 @@ public class HelperMethods {
         return temperatureString;
     }
 
-    public static ArrayList<HourWeather> createHourWeatherList(List<Hourly> list) {
+    public static ArrayList<HourWeather> createHourWeatherList(List<HourLocal> list) {
         ArrayList<HourWeather> hourWeathers = new ArrayList<>();
         for (int i = 0; i < list.toArray().length; i++) {
             hourWeathers.add(new HourWeather(
                     HelperMethods.getTime(list.get(i).getDt()),
                     HelperMethods.getDate(list.get(i).getDt()),
-                    list.get(i).getWeather().get(0).getIcon(),
-                    HelperMethods.temperatureToString(list.get(i).getTemp())
+                    list.get(i).getIconId(),
+                    HelperMethods.temperatureToString(list.get(i).getTemperature())
             ));
         }
         return hourWeathers;
     }
 
-    public static ArrayList<DayWeather> createDayWeatherList(List<Daily> list) {
+    public static ArrayList<DayWeather> createDayWeatherList(List<DayLocal> list) {
         ArrayList<DayWeather> dayWeathers = new ArrayList<>();
         for (int i = 0; i < list.toArray().length; i++) {
             dayWeathers.add(new DayWeather(
                     HelperMethods.getDate(list.get(i).getDt()),
-                    list.get(i).getWeather().get(0).getIcon(),
-                    HelperMethods.temperatureToString(list.get(i).getTemp().getDay()),
-                    HelperMethods.temperatureToString(list.get(i).getTemp().getNight())
+                    list.get(i).getIconId(),
+                    HelperMethods.temperatureToString(list.get(i).getTemperatureDay()),
+                    HelperMethods.temperatureToString(list.get(i).getTemperatureNight())
             ));
         }
         return dayWeathers;

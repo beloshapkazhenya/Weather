@@ -4,6 +4,9 @@ import com.example.weather.api.WeatherAPI;
 import com.example.weather.models.local.currentweatherlocal.CurrentWeatherLocalModel;
 import com.example.weather.models.local.currentweatherlocal.MainLocal;
 import com.example.weather.models.local.currentweatherlocal.WeatherLocal;
+import com.example.weather.models.local.onecalllocal.DayLocal;
+import com.example.weather.models.local.onecalllocal.HourLocal;
+import com.example.weather.models.local.onecalllocal.OnecallLocalModel;
 import com.example.weather.models.onecall.OneCallModel;
 
 import java.util.stream.Collectors;
@@ -40,10 +43,26 @@ public class WeatherRepository {
                 ));
     }
 
-    public Observable<OneCallModel> getWeather(double latitude, double longitude) {
+    public Observable<OnecallLocalModel> getWeather(double latitude, double longitude) {
         String EXCLUDE = "minutely,alert,currents";
         return WeatherAPI
                 .getWeather()
-                .getOnecall(latitude, longitude, API_KEY, LANGUAGE, UNITS, EXCLUDE);
+                .getOnecall(latitude, longitude, API_KEY, LANGUAGE, UNITS, EXCLUDE)
+                .map(oneCallModel -> new OnecallLocalModel(
+                        oneCallModel
+                                .getHourly()
+                                .stream()
+                                .map(hourly -> new HourLocal(hourly.getDt(), hourly.getTemp(), hourly.getWeather().get(0).getIcon()))
+                                .collect(
+                                        Collectors.toCollection(RealmList::new)
+                                ),
+                        oneCallModel
+                                .getDaily()
+                                .stream()
+                                .map(daily -> new DayLocal(daily.getDt(), daily.getWeather().get(0).getIcon(), daily.getTemp().getDay(), daily.getTemp().getNight()))
+                                .collect(
+                                        Collectors.toCollection(RealmList::new)
+                                )
+                ));
     }
 }
