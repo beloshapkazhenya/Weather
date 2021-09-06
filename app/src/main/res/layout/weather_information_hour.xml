@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_marginStart="@dimen/margin_start"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/vTvHourTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        tools:text="@string/tools_time" />
+
+    <TextView
+        android:id="@+id/vTvHourDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="@string/tools_date" />
+
+    <ImageView
+        android:id="@+id/vIvHourIcon"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:contentDescription="@string/weather_hour_icon_contentDescription"
+        tools:src="@drawable/unknown" />
+
+    <TextView
+        android:id="@+id/vTvHourTemperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        tools:text="@string/tools_temperature" />
+
+</LinearLayout>

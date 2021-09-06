@@ -1,18 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:id="@+id/vLnLtMainView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background"
+        android:orientation="vertical"
+        android:padding="@dimen/padding"
+        tools:context=".ui.mainscreen.MainActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/vTvCurrentLocationTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            tools:text="@string/tools_location" />
+
+        <LinearLayout
+            android:id="@+id/vLnLtCurrentWeather"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/padding_top">
+
+                <TextView
+                    android:id="@+id/vTvCurrentTemperature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textSize="@dimen/text_size_large"
+                    tools:text="@string/tools_temperature" />
+
+                <ImageView
+                    android:id="@+id/vIvCurrentWeatherIcon"
+                    android:layout_width="@dimen/image_width_large"
+                    android:layout_height="@dimen/image_height_large"
+                    android:contentDescription="@string/current_weather_icon"
+                    tools:src="@drawable/unknown" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_start_small"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/vTvSunriseTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/height_null"
+                        android:layout_marginStart="@dimen/margin_start_small"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        app:drawableLeftCompat="@drawable/icon_sunrise"
+                        tools:text="@string/tools_time" />
+
+                    <TextView
+                        android:id="@+id/vTvSunsetTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/height_null"
+                        android:layout_marginStart="@dimen/margin_start_small"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        app:drawableLeftCompat="@drawable/icon_sunset"
+                        tools:text="@string/tools_time" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/vTvCurrentWeatherDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/black"
+                tools:text="@string/tools_description" />
+
+            <TextView
+                android:id="@+id/vTvCurrentWeatherFeelsLike"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                tools:text="@string/tools_feels_like" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/vLnLtInformationField"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/layout_height"
+            android:layout_marginTop="@dimen/margin_top"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/vLnLtWeatherParameters"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/vTvWindSpeed"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height_null"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/drawable_padding"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    app:drawableLeftCompat="@drawable/icon_wind"
+                    tools:text="@string/tools_wind_speed" />
+
+                <TextView
+                    android:id="@+id/vTvPressure"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height_null"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/drawable_padding"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    app:drawableLeftCompat="@drawable/icon_pressure"
+                    tools:text="@string/tools_pressure" />
+
+                <TextView
+                    android:id="@+id/vTvHumidity"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height_null"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/drawable_padding"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    app:drawableLeftCompat="@drawable/icon_humidity"
+                    tools:text="@string/tools_humidity" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/vRvHourlyInformation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_start_medium"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/weather_information_hour" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/vRvDailyInformation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top"
+            android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/weather_information_day" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/separator_height"
+            android:background="@color/separatorColor" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/vFrLtProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/loader_background"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="invisible">
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/image_height_large"
+            android:layout_gravity="center"
+            tools:visibility="visible" />
+
+    </FrameLayout>
+
+
+</FrameLayout>
