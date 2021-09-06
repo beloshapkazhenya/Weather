@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
-public class Weather {
+public class WeatherResponse {
 
     @SerializedName("id")
     @Expose

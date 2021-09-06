@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class Hourly {
+public class DailyResponse {
 
     @SerializedName("clouds")
     private Long mClouds;
@@ -15,21 +15,29 @@ public class Hourly {
     @SerializedName("dt")
     private Long mDt;
     @SerializedName("feels_like")
-    private Double mFeelsLike;
+    private FeelsLikeResponse mFeelsLikeResponse;
     @SerializedName("humidity")
     private Long mHumidity;
+    @SerializedName("moon_phase")
+    private Double mMoonPhase;
+    @SerializedName("moonrise")
+    private Long mMoonrise;
+    @SerializedName("moonset")
+    private Long mMoonset;
     @SerializedName("pop")
     private float mPop;
     @SerializedName("pressure")
     private Long mPressure;
+    @SerializedName("sunrise")
+    private Long mSunrise;
+    @SerializedName("sunset")
+    private Long mSunset;
     @SerializedName("temp")
-    private Double mTemp;
+    private TempResponse mTempResponse;
     @SerializedName("uvi")
     private Double mUvi;
-    @SerializedName("visibility")
-    private Long mVisibility;
     @SerializedName("weather")
-    private List<Weather> mWeather;
+    private List<WeatherResponse> mWeatherResponse;
     @SerializedName("wind_deg")
     private Long mWindDeg;
     @SerializedName("wind_gust")
@@ -61,12 +69,12 @@ public class Hourly {
         mDt = dt;
     }
 
-    public Double getFeelsLike() {
-        return mFeelsLike;
+    public FeelsLikeResponse getFeelsLike() {
+        return mFeelsLikeResponse;
     }
 
-    public void setFeelsLike(Double feelsLike) {
-        mFeelsLike = feelsLike;
+    public void setFeelsLike(FeelsLikeResponse feelsLikeResponse) {
+        mFeelsLikeResponse = feelsLikeResponse;
     }
 
     public Long getHumidity() {
@@ -75,6 +83,30 @@ public class Hourly {
 
     public void setHumidity(Long humidity) {
         mHumidity = humidity;
+    }
+
+    public Double getMoonPhase() {
+        return mMoonPhase;
+    }
+
+    public void setMoonPhase(Double moonPhase) {
+        mMoonPhase = moonPhase;
+    }
+
+    public Long getMoonrise() {
+        return mMoonrise;
+    }
+
+    public void setMoonrise(Long moonrise) {
+        mMoonrise = moonrise;
+    }
+
+    public Long getMoonset() {
+        return mMoonset;
+    }
+
+    public void setMoonset(Long moonset) {
+        mMoonset = moonset;
     }
 
     public float getPop() {
@@ -93,12 +125,28 @@ public class Hourly {
         mPressure = pressure;
     }
 
-    public Double getTemp() {
-        return mTemp;
+    public Long getSunrise() {
+        return mSunrise;
     }
 
-    public void setTemp(Double temp) {
-        mTemp = temp;
+    public void setSunrise(Long sunrise) {
+        mSunrise = sunrise;
+    }
+
+    public Long getSunset() {
+        return mSunset;
+    }
+
+    public void setSunset(Long sunset) {
+        mSunset = sunset;
+    }
+
+    public TempResponse getTemp() {
+        return mTempResponse;
+    }
+
+    public void setTemp(TempResponse tempResponse) {
+        mTempResponse = tempResponse;
     }
 
     public Double getUvi() {
@@ -109,20 +157,12 @@ public class Hourly {
         mUvi = uvi;
     }
 
-    public Long getVisibility() {
-        return mVisibility;
+    public List<WeatherResponse> getWeather() {
+        return mWeatherResponse;
     }
 
-    public void setVisibility(Long visibility) {
-        mVisibility = visibility;
-    }
-
-    public List<Weather> getWeather() {
-        return mWeather;
-    }
-
-    public void setWeather(List<Weather> weather) {
-        mWeather = weather;
+    public void setWeather(List<WeatherResponse> weatherResponse) {
+        mWeatherResponse = weatherResponse;
     }
 
     public Long getWindDeg() {

@@ -4,7 +4,7 @@ package com.example.weather.models.onecall;
 import com.google.gson.annotations.SerializedName;
 
 @SuppressWarnings("unused")
-public class Weather {
+public class WeatherResponse {
 
     @SerializedName("description")
     private String mDescription;

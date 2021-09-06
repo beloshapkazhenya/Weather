@@ -5,35 +5,35 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class CurrentWeatherModel {
+public class CurrentWeatherResponse {
 
     @SerializedName("coord")
     @Expose
-    private Coord coord;
+    private CoordResponse coordResponse;
     @SerializedName("weather")
     @Expose
-    private List<Weather> weather = null;
+    private List<WeatherResponse> weatherResponse = null;
     @SerializedName("base")
     @Expose
     private String base;
     @SerializedName("main")
     @Expose
-    private Main main;
+    private MainResponse mainResponse;
     @SerializedName("visibility")
     @Expose
     private Integer visibility;
     @SerializedName("wind")
     @Expose
-    private Wind wind;
+    private WindResponse windResponse;
     @SerializedName("clouds")
     @Expose
-    private Clouds clouds;
+    private CloudsResponse cloudsResponse;
     @SerializedName("dt")
     @Expose
     private Integer dt;
     @SerializedName("sys")
     @Expose
-    private Sys sys;
+    private SysResponse sysResponse;
     @SerializedName("timezone")
     @Expose
     private Integer timezone;
@@ -47,20 +47,20 @@ public class CurrentWeatherModel {
     @Expose
     private Integer cod;
 
-    public Coord getCoord() {
-        return coord;
+    public CoordResponse getCoordResponse() {
+        return coordResponse;
     }
 
-    public void setCoord(Coord coord) {
-        this.coord = coord;
+    public void setCoordResponse(CoordResponse coordResponse) {
+        this.coordResponse = coordResponse;
     }
 
-    public List<Weather> getWeather() {
-        return weather;
+    public List<WeatherResponse> getWeather() {
+        return weatherResponse;
     }
 
-    public void setWeather(List<Weather> weather) {
-        this.weather = weather;
+    public void setWeather(List<WeatherResponse> weatherResponse) {
+        this.weatherResponse = weatherResponse;
     }
 
     public String getBase() {
@@ -71,12 +71,12 @@ public class CurrentWeatherModel {
         this.base = base;
     }
 
-    public Main getMain() {
-        return main;
+    public MainResponse getMain() {
+        return mainResponse;
     }
 
-    public void setMain(Main main) {
-        this.main = main;
+    public void setMain(MainResponse mainResponse) {
+        this.mainResponse = mainResponse;
     }
 
     public Integer getVisibility() {
@@ -87,20 +87,20 @@ public class CurrentWeatherModel {
         this.visibility = visibility;
     }
 
-    public Wind getWind() {
-        return wind;
+    public WindResponse getWind() {
+        return windResponse;
     }
 
-    public void setWind(Wind wind) {
-        this.wind = wind;
+    public void setWind(WindResponse windResponse) {
+        this.windResponse = windResponse;
     }
 
-    public Clouds getClouds() {
-        return clouds;
+    public CloudsResponse getClouds() {
+        return cloudsResponse;
     }
 
-    public void setClouds(Clouds clouds) {
-        this.clouds = clouds;
+    public void setClouds(CloudsResponse cloudsResponse) {
+        this.cloudsResponse = cloudsResponse;
     }
 
     public Integer getDt() {
@@ -111,12 +111,12 @@ public class CurrentWeatherModel {
         this.dt = dt;
     }
 
-    public Sys getSys() {
-        return sys;
+    public SysResponse getSys() {
+        return sysResponse;
     }
 
-    public void setSys(Sys sys) {
-        this.sys = sys;
+    public void setSys(SysResponse sysResponse) {
+        this.sysResponse = sysResponse;
     }
 
     public Integer getTimezone() {

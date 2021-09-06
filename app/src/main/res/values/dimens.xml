@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding">20dp</dimen>
+    <dimen name="padding_small">4dp</dimen>
+    <dimen name="padding_top">12dp</dimen>
+    <dimen name="margin_start">20dp</dimen>
+    <dimen name="margin_start_small">4dp</dimen>
+    <dimen name="margin_start_medium">8dp</dimen>
+    <dimen name="margin_start_large">12dp</dimen>
+    <dimen name="separator_height">1dp</dimen>
+    <dimen name="margin_top">8dp</dimen>
+    <dimen name="text_size_small">11sp</dimen>
+    <dimen name="text_size_large">32sp</dimen>
+    <dimen name="image_width_large">68dp</dimen>
+    <dimen name="image_height_large">68dp</dimen>
+    <dimen name="image_width_medium">28dp</dimen>
+    <dimen name="image_height_medium">28dp</dimen>
+    <dimen name="height_null">0dp</dimen>
+    <dimen name="layout_height">80dp</dimen>
+    <dimen name="drawable_padding">4dp</dimen>
+    <dimen name="min_width">40dp</dimen>
+</resources>

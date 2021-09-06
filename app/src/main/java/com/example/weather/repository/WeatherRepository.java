@@ -1,12 +1,12 @@
 package com.example.weather.repository;
 
 import com.example.weather.api.WeatherAPI;
-import com.example.weather.models.local.currentweatherlocal.CurrentWeatherLocalModel;
+import com.example.weather.models.local.currentweatherlocal.CurrentWeatherLocal;
 import com.example.weather.models.local.currentweatherlocal.MainLocal;
 import com.example.weather.models.local.currentweatherlocal.WeatherLocal;
 import com.example.weather.models.local.onecalllocal.DayLocal;
 import com.example.weather.models.local.onecalllocal.HourLocal;
-import com.example.weather.models.local.onecalllocal.OnecallLocalModel;
+import com.example.weather.models.local.onecalllocal.OnecallLocal;
 
 import java.util.stream.Collectors;
 
@@ -18,12 +18,12 @@ public class WeatherRepository {
     private final String API_KEY = "d2c2a3f7b64285943d93871df271f16a";
     private final String UNITS = "metric";
 
-    public Observable<CurrentWeatherLocalModel> getCurrent(double latitude, double longitude) {
+    public Observable<CurrentWeatherLocal> getCurrent(double latitude, double longitude) {
         return WeatherAPI
                 .getWeather()
                 .getCurrent(latitude, longitude, API_KEY, LANGUAGE, UNITS)
-                .map(currentWeatherModel -> new CurrentWeatherLocalModel(
-                        currentWeatherModel
+                .map(currentWeatherResponse -> new CurrentWeatherLocal(
+                        currentWeatherResponse
                                 .getWeather()
                                 .stream()
                                 .map(weather -> new WeatherLocal(
@@ -33,25 +33,25 @@ public class WeatherRepository {
                                 .collect(
                                         Collectors.toCollection(RealmList::new)
                                 ),
-                        new MainLocal(currentWeatherModel.getMain().getTemp(),
-                                currentWeatherModel.getMain().getFeelsLike(),
-                                currentWeatherModel.getMain().getPressure(),
-                                currentWeatherModel.getMain().getHumidity()),
-                        currentWeatherModel.getWind().getSpeed(),
-                        currentWeatherModel.getDt(),
-                        currentWeatherModel.getSys().getSunrise(),
-                        currentWeatherModel.getSys().getSunset(),
-                        currentWeatherModel.getName()
+                        new MainLocal(currentWeatherResponse.getMain().getTemp(),
+                                currentWeatherResponse.getMain().getFeelsLike(),
+                                currentWeatherResponse.getMain().getPressure(),
+                                currentWeatherResponse.getMain().getHumidity()),
+                        currentWeatherResponse.getWind().getSpeed(),
+                        currentWeatherResponse.getDt(),
+                        currentWeatherResponse.getSys().getSunrise(),
+                        currentWeatherResponse.getSys().getSunset(),
+                        currentWeatherResponse.getName()
                 ));
     }
 
-    public Observable<OnecallLocalModel> getWeather(double latitude, double longitude) {
+    public Observable<OnecallLocal> getWeather(double latitude, double longitude) {
         String EXCLUDE = "minutely,alert,currents";
         return WeatherAPI
                 .getWeather()
                 .getOnecall(latitude, longitude, API_KEY, LANGUAGE, UNITS, EXCLUDE)
-                .map(oneCallModel -> new OnecallLocalModel(
-                        oneCallModel
+                .map(oneCallResponse -> new OnecallLocal(
+                        oneCallResponse
                                 .getHourly()
                                 .stream()
                                 .map(hourly -> new HourLocal(
@@ -62,7 +62,7 @@ public class WeatherRepository {
                                 .collect(
                                         Collectors.toCollection(RealmList::new)
                                 ),
-                        oneCallModel
+                        oneCallResponse
                                 .getDaily()
                                 .stream()
                                 .map(daily -> new DayLocal(

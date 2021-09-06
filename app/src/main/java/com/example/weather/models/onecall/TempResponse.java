@@ -4,12 +4,16 @@ package com.example.weather.models.onecall;
 import com.google.gson.annotations.SerializedName;
 
 @SuppressWarnings("unused")
-public class FeelsLike {
+public class TempResponse {
 
     @SerializedName("day")
     private Double mDay;
     @SerializedName("eve")
     private Double mEve;
+    @SerializedName("max")
+    private Double mMax;
+    @SerializedName("min")
+    private Double mMin;
     @SerializedName("morn")
     private Double mMorn;
     @SerializedName("night")
@@ -29,6 +33,22 @@ public class FeelsLike {
 
     public void setEve(Double eve) {
         mEve = eve;
+    }
+
+    public Double getMax() {
+        return mMax;
+    }
+
+    public void setMax(Double max) {
+        mMax = max;
+    }
+
+    public Double getMin() {
+        return mMin;
+    }
+
+    public void setMin(Double min) {
+        mMin = min;
     }
 
     public Double getMorn() {

@@ -3,7 +3,7 @@ package com.example.weather.models.currentweather;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Main {
+public class MainResponse {
 
     @SerializedName("temp")
     @Expose

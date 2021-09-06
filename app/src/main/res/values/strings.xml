@@ -2,7 +2,7 @@
     <string name="app_name">Weather</string>
     <string name="weather_hour_icon_contentDescription">weather icon</string>
     <string name="weather_icon_day">weather icon</string>
-    <string name="wind_icon">wind icon</string>
+    <string name="wind_icon">windResponse icon</string>
     <string name="pressure_icon">pressure icon</string>
     <string name="sunrise">sunrise</string>
     <string name="sunset">sunset</string>
@@ -14,13 +14,18 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="toolsTime">00:00</string>
-    <string name="toolsTemperature">+20ºC</string>
-    <string name="toolsDate">3 сентября</string>
-    <string name="toolsLocation">Бобруйск</string>
-    <string name="toolsDescription">солнечно</string>
-    <string name="toolsFeelsLike">Ощущается как: +20ºC</string>
-    <string name="toolsWindSpeed">5 м/с</string>
-    <string name="toolsPressure">760 мм рт.ст.</string>
-    <string name="toolsHumidity">50%</string>
+    <string name="tools_time">00:00</string>
+    <string name="tools_temperature">+20ºC</string>
+    <string name="tools_date">3 сентября</string>
+    <string name="tools_location">Бобруйск</string>
+    <string name="tools_description">солнечно</string>
+    <string name="tools_feels_like">Ощущается как: +20ºC</string>
+    <string name="tools_wind_speed">5 м/с</string>
+    <string name="tools_pressure">760 мм рт.ст.</string>
+    <string name="tools_humidity">50%</string>
+    <string name="feels_like">\Ощущается как: \</string>
+    <string name="percent">%</string>
+    <string name="pressure_units">\ мм.рт.ст.\</string>
+    <string name="wind_speed_units">\ м/с\</string>
+    <string name="temperature_units">ºC</string>
 </resources>

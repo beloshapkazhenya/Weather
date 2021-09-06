@@ -1,7 +1,7 @@
 package com.example.weather.service;
 
-import com.example.weather.models.currentweather.CurrentWeatherModel;
-import com.example.weather.models.onecall.OneCallModel;
+import com.example.weather.models.currentweather.CurrentWeatherResponse;
+import com.example.weather.models.onecall.OneCallResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -9,7 +9,7 @@ import retrofit2.http.Query;
 
 public interface WeatherCore {
     @GET("/data/2.5/weather")
-    Observable<CurrentWeatherModel> getCurrent(
+    Observable<CurrentWeatherResponse> getCurrent(
             @Query("lat") double latitude,
             @Query(("lon")) double longitude,
             @Query("appid") String apiKey,
@@ -18,7 +18,7 @@ public interface WeatherCore {
     );
 
     @GET("/data/2.5/onecall")
-    Observable<OneCallModel> getOnecall(
+    Observable<OneCallResponse> getOnecall(
             @Query("lat") double latitude,
             @Query(("lon")) double longitude,
             @Query("appid") String apiKey,

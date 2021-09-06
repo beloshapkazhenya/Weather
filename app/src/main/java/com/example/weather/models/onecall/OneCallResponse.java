@@ -6,14 +6,14 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class OneCallModel {
+public class OneCallResponse {
 
     @SerializedName("current")
-    private Current mCurrent;
+    private CurrentResponse mCurrentResponse;
     @SerializedName("daily")
-    private List<Daily> mDaily;
+    private List<DailyResponse> mDailyResponse;
     @SerializedName("hourly")
-    private List<Hourly> mHourly;
+    private List<HourlyResponse> mHourlyResponse;
     @SerializedName("lat")
     private Double mLat;
     @SerializedName("lon")
@@ -23,28 +23,28 @@ public class OneCallModel {
     @SerializedName("timezone_offset")
     private Long mTimezoneOffset;
 
-    public Current getCurrent() {
-        return mCurrent;
+    public CurrentResponse getCurrent() {
+        return mCurrentResponse;
     }
 
-    public void setCurrent(Current current) {
-        mCurrent = current;
+    public void setCurrent(CurrentResponse currentResponse) {
+        mCurrentResponse = currentResponse;
     }
 
-    public List<Daily> getDaily() {
-        return mDaily;
+    public List<DailyResponse> getDaily() {
+        return mDailyResponse;
     }
 
-    public void setDaily(List<Daily> daily) {
-        mDaily = daily;
+    public void setDaily(List<DailyResponse> dailyResponse) {
+        mDailyResponse = dailyResponse;
     }
 
-    public List<Hourly> getHourly() {
-        return mHourly;
+    public List<HourlyResponse> getHourly() {
+        return mHourlyResponse;
     }
 
-    public void setHourly(List<Hourly> hourly) {
-        mHourly = hourly;
+    public void setHourly(List<HourlyResponse> hourlyResponse) {
+        mHourlyResponse = hourlyResponse;
     }
 
     public Double getLat() {

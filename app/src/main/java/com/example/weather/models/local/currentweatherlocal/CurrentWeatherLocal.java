@@ -5,7 +5,7 @@ import java.util.List;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
-public class CurrentWeatherLocalModel extends RealmObject {
+public class CurrentWeatherLocal extends RealmObject {
 
     private RealmList<WeatherLocal> weather;
     private MainLocal mainLocal;
@@ -15,13 +15,13 @@ public class CurrentWeatherLocalModel extends RealmObject {
     private Integer sunrise;
     private Integer sunset;
 
-    public CurrentWeatherLocalModel(RealmList<WeatherLocal> weathers,
-                                    MainLocal mainLocal,
-                                    double windSpeed,
-                                    Integer dt,
-                                    Integer sunrise,
-                                    Integer sunset,
-                                    String name) {
+    public CurrentWeatherLocal(RealmList<WeatherLocal> weathers,
+                               MainLocal mainLocal,
+                               double windSpeed,
+                               Integer dt,
+                               Integer sunrise,
+                               Integer sunset,
+                               String name) {
         this.weather = weathers;
         this.mainLocal = mainLocal;
         this.windSpeed = windSpeed;
@@ -31,7 +31,7 @@ public class CurrentWeatherLocalModel extends RealmObject {
         this.name = name;
     }
 
-    public CurrentWeatherLocalModel() {
+    public CurrentWeatherLocal() {
     }
 
 
