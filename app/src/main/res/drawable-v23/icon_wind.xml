@@ -2,6 +2,6 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:drawable="@drawable/ic_wind"
-        android:width="20dp"
-        android:height="20dp"/>
+        android:width="@dimen/icon"
+        android:height="@dimen/icon"/>
 </layer-list>
