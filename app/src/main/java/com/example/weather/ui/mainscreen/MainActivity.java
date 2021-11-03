@@ -368,7 +368,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateHumidity(int humidity) {
-        String humidityString = humidity + getString(R.string.percent);
+        String humidityString = humidity + getString(R.string.humidity);
 
         humidityTextView.setText(humidityString);
     }
@@ -378,9 +378,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateCurrentWeatherFeelsLike(double feelsLike) {
-        String feelsLikeString = getString(R.string.feels_like) + HelperMethods.temperatureToString(feelsLike, this);
-
-        feelsLikeTextView.setText(feelsLikeString);
+        feelsLikeTextView.setText(
+                String.format(
+                        getString(R.string.feels_like),
+                        HelperMethods.temperatureToString(feelsLike, this)
+                )
+        );
     }
 
     private void updateSunrise(long sunrise) {
@@ -392,16 +395,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateWindSpeed(double windSpeed) {
-        windTextView.setText(HelperMethods.windSpeedToString(windSpeed, this));
+        windTextView.setText(
+                HelperMethods
+                        .windSpeedToString(
+                                windSpeed,
+                                this
+                        )
+        );
     }
 
     //saving data
     private void saveCurrentWeatherData(CurrentWeatherLocal currentWeatherLocal) {
-        currentWeatherLocalDatabase.executeTransaction(realm -> realm.insertOrUpdate(currentWeatherLocal));
+        currentWeatherLocalDatabase
+                .executeTransaction(realm ->
+                        realm.insertOrUpdate(currentWeatherLocal)
+                );
     }
 
     private void saveOneCallWeatherData(OnecallLocal onecallLocal) {
-        oneCallWeatherDatabase.executeTransaction(realm -> realm.insertOrUpdate(onecallLocal));
+        oneCallWeatherDatabase
+                .executeTransaction(realm ->
+                        realm.insertOrUpdate(onecallLocal)
+                );
     }
 
     //swipe detector
